@@ -1,0 +1,31 @@
+{
+  "name": "codify",
+  "version": "1.0.0",
+  "description": "An interactive platform to learn coding by completing various challenges",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreademurtas/codify.git"
+  },
+  "keywords": [
+    "code",
+    "coding",
+    "codify"
+  ],
+  "dependencies": {
+    "express": "latest"
+  },
+  "author": "Andrea De Murtas",
+  "contributors": [
+    "Thomas Kirschner",
+    "Stefano Galizia"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreademurtas/codify/issues"
+  },
+  "homepage": "https://github.com/andreademurtas/codify#readme"
+}

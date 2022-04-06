@@ -1,0 +1,20 @@
+version: "3.8"
+services:
+  nginx:
+    build: "./containers/nginx"
+    ports:
+      - "80:80"
+    container_name: "nginx"
+    networks:
+      - app
+
+  node:
+    build: "./containers/node"
+    container_name: "node"
+    networks:
+      - app
+    ports:
+      - "3000:3000"
+
+networks:
+  app:
