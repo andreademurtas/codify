@@ -16,7 +16,8 @@
     "codify"
   ],
   "dependencies": {
-    "express": "latest"
+    "express": "latest",
+	"mongodb": "latest"
   },
   "author": "Andrea De Murtas",
   "contributors": [

@@ -13,8 +13,14 @@ services:
     container_name: "node"
     networks:
       - app
-    ports:
-      - "3000:3000"
+      - db
+
+  mongodb:
+    build: "./containers/mongo"
+    container_name: "mongodb"
+    networks:
+      - db
 
 networks:
   app:
+  db:
