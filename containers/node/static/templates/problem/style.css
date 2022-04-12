@@ -1,3 +1,7 @@
+body{
+    background-color: #fbfbfb;
+}
+
 div[id="container_1"]{
     width: 100%;
 }
@@ -7,7 +11,6 @@ div[id="container_"]{
 }
 
 textarea[id="textarea_outputCode"]{
-    border-radius: 5px;
     width: 100%;
     height: 200px;
     min-height: 200px;
@@ -15,18 +18,33 @@ textarea[id="textarea_outputCode"]{
 }
 
 iframe[id="iframeCode"]{
+    background-color: #fff;
     border-radius: 5px;
     width: 100%;
     height: 500px;
 }
 
 textarea[id="textareaCode"]{
-    border-radius: 5px;
     width: 100%;
     height: 500px;
     min-height: 500px;
     max-height: 500px;
 }
+textarea:focus{
+    outline: none;
+}
 body, textarea, iframe{
     font-family: monospace;
+}
+textarea{
+    border-color: #686868;
+    border-radius: 3px;
+    /* display: block; */
+}
+
+button{
+    background-color: rgb(240,240,240);
+    border-radius: 3px;
+    border-color: #686868;
+    padding: 0.83333rem;
 }
