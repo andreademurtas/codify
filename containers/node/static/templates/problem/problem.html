@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="application/javascript" src="../../js/bootstrap.min.js"></script>
+    <script type="application/javascript" src="../../scripts/script.js" ></script>
+    <script type="application/javascript" src="../../scripts/api.js" ></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--Serve per poter fare le richieste alle api con ajax-->
+</head>
+<body>
+    <title>Codify</title>
+    <div class="container" id="parte_superiore" style="width: 100%;"><h1>Codify</h1></div>
+    <div class="container" id="parte_bottoni">
+        <!-- <h1>Parte bottoni</h1> -->
+        <form>
+            <div class="form-row align-items-center">
+                <div class="col-4 my-1">
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Language</label>
+                    <select class="custom-select mr-sm-2" id="language">
+                        <option onclick= "cambio_linguaggio('')">Choose...</option>
+                        <option value="PYTHON" onclick= "cambio_linguaggio('Python')">Python</option>
+                        <option value="C" onclick= "cambio_linguaggio('C')">C</option>
+                        <option value="JAVA" onclick= "cambio_linguaggio('Java')">Java</option>
+                    </select>
+                </div>
+                <div class="col-1 my-1">
+                    <button id="button_run" class="btn btn-primary" onfocus="prevent()" onclick="try{excecute_request()}catch(e){alert(e)}">Run</button>
+                    <!-- <button id="button_run" class="btn btn-primary" onfocus="prevent()" onclick="try{excecute_request('PYTHON')}catch(e){alert(e)}">Run</button> -->
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="container" id="container_1" >
+        <div class="row">
+            <div class="col" id="iframecontainer">
+                <div id="iframe">
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Problema</label>
+                    <iframe id="iframeCode" src="problem.txt" title="problema"></iframe>
+                </div>
+            </div>
+
+            <div class="col" id="textareacontainer">
+                
+                <div id="textarea">
+                    <label class="mr-sm-2" for="inlineFormCustomSelect">Editor</label>
+                    <textarea id="textareaCode" autocorrect="off" autocapitalize="off" spellcheck="false" onfocus="get_tab()"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="container_2">
+        <div class="col" id="textarea_outputcontainer">
+            <div id="textarea_output">
+                <label class="mr-sm-2" for="inlineFormCustomSelect">Output</label>
+                <textarea id="textarea_outputCode" title="output" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="true">Output</textarea>
+            </div>
+        </div>
+    </div>
+        
+    </div>
+    
+</body>
+</html>
