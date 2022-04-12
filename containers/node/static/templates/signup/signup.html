@@ -4,32 +4,32 @@
 <head>
     <title>Signup</title>
 	<meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="templates/signup/styles.css">
 </head>
 <body>
     <div class="container-signup">
         <span class="signup-title">
             Sign Up
         </span>
-        <form class="signup-form">
+        <form class="signup-form" action="/signup" method="post">
             <div class="wrap-input" data-validate="Username already used">
                 <label class="username_label">
                     User Name
                 </label>
-                <input class="input" type="text" name="email" >
+                <input class="input" type="text" name="username" id="username">
             </div>
             <div class="wrap-input" data-validate="Valid email is required">
                 <label class="email_label">
                     Email
                 </label>
-                <input class="input" type="text" name="email" >
+                <input class="input" type="text" name="email" id="email">
             </div>
             <div class="wrap-input" data-validate="Password is required">
                 <label class="password_label">
                     Password
                 </label>
-                <input class="input" type="password" name="pass" >
+                <input class="input" type="password" name="pass" id="password">
             </div>
             <div class="wrap-input" data-validate="Password is required">
                 <label class="confirm_password_label">
