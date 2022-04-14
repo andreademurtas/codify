@@ -18,9 +18,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname + '/static/login/login.html'));
-});
 
 //signup page
 app.get('/signup', (req, res) => {
@@ -47,7 +44,7 @@ app.post('/signup', (req, res) => {
 
 //login page
 app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname,'/static/templates/login.html'));
+  res.sendFile(path.join(__dirname,'/static/templates/login/login.html'));
 });
 
 // login post request
