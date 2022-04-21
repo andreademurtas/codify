@@ -6,13 +6,21 @@
 	<meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="templates/signup/styles.css">
+	<script src="/js/signup_login.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+    $(document).ready(function(){
+      const form = document.getElementById('signup-form');
+      form.addEventListener('submit', handleFormSubmit);
+    });
+    </script>
 </head>
 <body>
     <div class="container-signup">
         <span class="signup-title">
             Sign Up
         </span>
-        <form class="signup-form" action="/signup" method="post">
+        <form class="signup-form" action="/signup" id="signup-form">
             <div class="wrap-input" data-validate="Username already used">
                 <label class="username_label">
                     User Name
@@ -29,7 +37,7 @@
                 <label class="password_label">
                     Password
                 </label>
-                <input class="input" type="password" name="pass" id="password">
+                <input class="input" type="password" name="password" id="password">
             </div>
             <div class="wrap-input" data-validate="Password is required">
                 <label class="confirm_password_label">
@@ -69,7 +77,11 @@
             <span class="txt1 member">
                 Already have an account?
             </span>
-            <a class="txt1 sign" href="../login/login.html">
+<<<<<<< HEAD
+            <a class="txt1 sign" href="templates/login/login.html">
+=======
+            <a class="txt1 sign" href="/login">
+>>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
                 Login
             </a>
         </div>
