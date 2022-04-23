@@ -13,7 +13,7 @@ app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
   resave: false,
   saveUninitialized: true,
-  secret: '1050db049ff7fdfba85e583303da60b8', 
+  secret: crypto.randomBytes(32).toString("hex"), 
   //24 hours
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
@@ -85,6 +85,17 @@ app.post('/signup', (req, res) => {
     }
     if (exists) {
       res.json({success: false, message: 'Username already exists.'});
+      res.redirect('/signup');
+      return;
+    }
+  users_module.User.exists({ email: req.body.email }, (err, exists) => {
+    if (err) {
+      res.json({success: false, message: err});
+      res.redirect('/signup');
+      return;
+    }
+    if (exists) {
+      res.json({success: false, message: 'Email already exists.'});
       res.redirect('/signup');
       return;
     }
