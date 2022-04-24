@@ -4,6 +4,7 @@ const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
 const session = require('express-session');
+const crypto = require('crypto');
 
 const app = express(); // create an instance of an express app
 
@@ -108,6 +109,7 @@ app.post('/signup', (req, res) => {
 	    req.session.user = user;
 		req.session.success = 'Authenticates as' + user.username;
         res.redirect('/');
+      });
     });
   });
 });
