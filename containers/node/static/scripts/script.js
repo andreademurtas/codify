@@ -23,7 +23,8 @@ function get_tab(){
 }
 
 function prevent(){
-    document.getElementById("button_run").addEventListener("click", function(e){e.preventDefault();});
+    document.getElementById('button_run').addEventListener("click", function(e){e.preventDefault();});
+    document.getElementById('button_check').addEventListener("click", function(e){e.preventDefault();});
 }
 
 
@@ -43,7 +44,28 @@ function cambio_linguaggio(linguaggio){
     }
 }
 
-function get_problem(){
-    var x = document.getElementById('iframeCode');
-    
+
+function check_result(n_problem){
+    var x = document.getElementById('textarea_outputCode');
+    var result = x.value.trim();
+    switch (n_problem){
+        case '1':
+            if (result == '15'){
+                alert('Risultato esatto!! :)');
+                break;
+            }
+        case '2':
+            if (result == '[2, 3, 5, 7 ,11, 13, 17]'){
+                alert('Risultato esatto!! :)');
+                break;
+            }
+        case '3':
+            if (result == 'CoDiFy'){
+                alert('Risultato esatto!! :)');
+                break;
+            }
+        default:
+            alert('Risultato sbagliato');
+            break;
+    }
 }

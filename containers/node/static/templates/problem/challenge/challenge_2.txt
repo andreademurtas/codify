@@ -1,1 +1,1 @@
-Stampa a schermo i primi 10 numeri primi
+Stampa a schermo i primi 7 numeri primi

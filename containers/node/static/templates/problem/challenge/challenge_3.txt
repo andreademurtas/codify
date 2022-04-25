@@ -1,1 +1,1 @@
-Stampa a schermo una stringa formata da 5 numeri consecutivi minori di 10
+Stampa a schermo la parola 'codify' dove le lettere sono alternate tra maiuscole e minuscole, partendo dalle maiuscole

@@ -10,10 +10,11 @@
     <script type="application/javascript" src="scripts/api.js" ></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--Serve per poter fare le richieste alle api con ajax-->
     <script>
+        var n_problem;
         function get_problem(dif=0){
             var url = window.location.href;
-            var n_problem = parseInt(url.split('_')[1])+dif;
-            if (n_problem<=0 || n_problem > 2){
+            n_problem = parseInt(url.split('_')[1])+dif;
+            if (n_problem<=0 || n_problem > 3){
                 alert('Nessun problema');
                 return;
             }
@@ -41,8 +42,11 @@
                     </select>
                 </div>
                 <div class="col-1 my-1">
-                    <button id="button_run" class="button_run" onfocus="prevent()" onclick="try{excecute_request()}catch(e){alert(e)}">Run</button>
+                    <button id="button_run" class="button_run" onclick="excecute_request()">Run</button>
                     <!-- <button id="button_run" class="btn btn-primary" onfocus="prevent()" onclick="try{excecute_request('PYTHON')}catch(e){alert(e)}">Run</button> -->
+                </div>
+                <div class="btn">
+                    <button id="button_check" onclick="check_result(n_problem)">Check</button>
                 </div>
             </div>
         </form>
@@ -94,6 +98,7 @@
     </div>
     <script>
         window.onload(get_problem());
+        window.onload(prevent());
     </script>
 </body>
 </html>
