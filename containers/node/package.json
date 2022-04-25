@@ -20,8 +20,7 @@
 	"bcryptjs": "latest",
 	"body-parser": "latest",
 	"mongoose": "latest",
-	"jsonwebtoken": "latest",
-    "express-session": "latest"
+    	"express-session": "latest"
   },
   "author": "Andrea De Murtas",
   "contributors": [
