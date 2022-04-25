@@ -1,0 +1,1 @@
+Stampa a schermo i primi 10 numeri primi

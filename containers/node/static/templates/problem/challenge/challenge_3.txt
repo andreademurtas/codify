@@ -1,0 +1,1 @@
+Stampa a schermo una stringa formata da 5 numeri consecutivi minori di 10

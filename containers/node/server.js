@@ -1,11 +1,12 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const path = require('path');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
-const jwtutils = require('./jwtutils');
+// const jwtutils = require('./jwtutils');
 const session = require('express-session');
+const { join } = require('path');
 
 const app = express(); // create an instance of an express app
 
@@ -169,6 +170,10 @@ app.get('/logout', function(req, res){
 
 app.get('/restricted', restrict, function(req, res){
   res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
+});
+
+app.get('/challenges', (req, res) => {
+  res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
 });
 
 app.listen(3000, () => {

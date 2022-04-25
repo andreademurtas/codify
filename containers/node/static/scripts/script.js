@@ -42,3 +42,8 @@ function cambio_linguaggio(linguaggio){
         x.value = "Scegliere la lingua...";
     }
 }
+
+function get_problem(){
+    var x = document.getElementById('iframeCode');
+    
+}

@@ -10,7 +10,7 @@ exports.mongoconnect = () => {
   }).catch(err => {
     console.log("Database connection error");
     console.log(err);
-    process.exit(-1);
+    //process.exit(-1);
   });
 };
 
