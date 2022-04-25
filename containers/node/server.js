@@ -67,13 +67,13 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
+// <<<<<<< HEAD
+// <<<<<<< HEAD
+// =======
+// =======
+// >>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
 
->>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
+// >>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
 //signup page
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname + '/static/templates/signup/signup.html'));
