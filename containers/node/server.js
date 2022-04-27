@@ -1,12 +1,10 @@
 const express = require('express');
-// const jwt = require('jsonwebtoken');
 const path = require('path');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
-// const jwtutils = require('./jwtutils');
 const session = require('express-session');
-const { join } = require('path');
+const crypto = require('crypto');
 
 const app = express(); // create an instance of an express app
 
@@ -16,7 +14,7 @@ app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
   resave: false,
   saveUninitialized: true,
-  secret: '1050db049ff7fdfba85e583303da60b8', 
+  secret: crypto.randomBytes(32).toString("hex"), 
   //24 hours
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
@@ -68,13 +66,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-// <<<<<<< HEAD
-// <<<<<<< HEAD
-// =======
-// =======
-// >>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
-
-// >>>>>>> 9fd020612f1b0b69baf175af28134eb81281f273
 //signup page
 app.get('/signup', (req, res) => {
   res.sendFile(path.join(__dirname + '/static/templates/signup/signup.html'));
@@ -98,6 +89,17 @@ app.post('/signup', (req, res) => {
       res.redirect('/signup');
       return;
     }
+  users_module.User.exists({ email: req.body.email }, (err, exists) => {
+    if (err) {
+      res.json({success: false, message: err});
+      res.redirect('/signup');
+      return;
+    }
+    if (exists) {
+      res.json({success: false, message: 'Email already exists.'});
+      res.redirect('/signup');
+      return;
+    }
   users_module.User.create({
     username: req.body.username,
     email: req.body.email,
@@ -107,6 +109,7 @@ app.post('/signup', (req, res) => {
 	    req.session.user = user;
 		req.session.success = 'Authenticates as' + user.username;
         res.redirect('/');
+      });
     });
   });
 });
@@ -119,28 +122,10 @@ app.get('/login', (req, res) => {
 
 // login post request
 app.post('/login', (req, res, next) => {
-  if (!req.body.username || !req.body.password || !req.body.email) {
-    res.json({success: false, message: 'Please enter username, email and password.'});
+  if (!req.body.username || !req.body.password) {
+    res.json({success: false, message: 'Please enter username and password.'});
     return;
   }
-  
-  /*users_module.User.findOne({ username: req.body.username })
-    .then( (user) => { 
-      if (!user) { res.json ({success: false, message: 'User not found.'}); }
-      else {
-        if (!bcrypt.compareSync(req.body.password, user.password)) {
-		  res.json({success: false, message: 'Wrong password.'});
-		} else {
-          const token = jwt.sign({id: user._id, username: user.username}, jwtutils.JWT_SECRET, {expiresIn: 60*60});
-		  //res.json({success: true, message: 'User logged in!', token: token});
-		  res.header('Set-Cookie', `x-access-token=${token};`);
-		}
-	  }
-  })
-  .catch( (err) => {
-    res.json({success: false, message: err.message});
-  });
-  */
   authenticate(req.body.username, req.body.password, (err, user) => {
     if (err) {
       return next(err);
