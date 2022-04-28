@@ -63,7 +63,7 @@ function restrict(req, res, next) {
 users_module.mongoconnect();
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.sendFile(path.join(__dirname + '/static/templates/homepage/homepage.html'));
 });
 
 //signup page
