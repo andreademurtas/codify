@@ -161,6 +161,10 @@ app.get('/challenges', (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
 });
 
+app.get('/user', restrict, function(req,res){
+  res.send("<h1>hello</h1>");
+});
+
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });

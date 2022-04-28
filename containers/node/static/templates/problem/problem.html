@@ -10,19 +10,21 @@
     <script type="application/javascript" src="scripts/api.js" ></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--Serve per poter fare le richieste alle api con ajax-->
     <script>
-        var n_problem;
-        function get_problem(dif=0){
+		$(document).ready(function(){
+          var n_problem;
+          function get_problem(dif=0){
             var url = window.location.href;
             n_problem = parseInt(url.split('_')[1])+dif;
             if (n_problem<=0 || n_problem > 3){
-                alert('Nessun problema');
-                return;
+              alert('Nessun problema');
+              return;
             }
             n_problem = n_problem.toString()
             var iframe = document.getElementById('iframeCode');
             window.location.href = url.split('_')[0] + '_' + n_problem;
             iframe.src = 'templates/problem/challenge/challenge_' + n_problem + '.txt';
-        }
+          }
+        });
     </script>
 </head>
 <body>
