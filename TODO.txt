@@ -10,7 +10,7 @@
 - corretto il fetching delle challenges (Thomas)
 - scrivere README (Thomas)
 - correggere api per codice (Thomas)
-- settare container per inviare mail con rabbit (Andrea)
+- settare container per inviare mail con rabbit (Andrea) (FATTO)
 
 ################################################################################
 FARE SEMPRE PULL PRIMA DI LAVORARE
