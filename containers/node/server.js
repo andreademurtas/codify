@@ -21,6 +21,7 @@ app.use(session({
 
 //static files
 app.use(express.static(path.join(__dirname, '/static')));
+app.use(express.static(path.join(__dirname, '/docs')));
 
 // Session-persisted message middleware
 app.use(function(req, res, next){
@@ -33,6 +34,9 @@ app.use(function(req, res, next){
   if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
   next();
 });
+
+// APIDOC
+app.use('/api-docs', express.static(path.join(__dirname, '/docs')));
 
 function authenticate(name, pass, fn) {
   users_module.User.findOne({ username: name })
@@ -81,29 +85,26 @@ app.post('/signup', (req, res) => {
   users_module.User.exists({ username: req.body.username }, (err, exists) => {
     if (err) {
       res.json({success: false, message: err});
-      res.redirect('/signup');
       return;
     }
     if (exists) {
       res.json({success: false, message: 'Username already exists.'});
-      res.redirect('/signup');
       return;
     }
   users_module.User.exists({ email: req.body.email }, (err, exists) => {
     if (err) {
       res.json({success: false, message: err});
-      res.redirect('/signup');
       return;
     }
     if (exists) {
       res.json({success: false, message: 'Email already exists.'});
-      res.redirect('/signup');
       return;
     }
   users_module.User.create({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 10)
+    password: bcrypt.hashSync(req.body.password, 10),
+    score: 0
   }).then( (user) => {
 	  req.session.regenerate(function(err) {
 	    req.session.user = user;
@@ -164,6 +165,63 @@ app.get('/challenges', (req, res) => {
 app.get('/user', restrict, function(req,res){
   res.send("<h1>hello</h1>");
 });
+
+// #############################################################################
+// SECTION FOR REST API
+// #############################################################################
+
+
+/**
+ * @api {get} /api/users/:id Request User information
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {Number} id Users username.
+ *
+ *
+ * @apiSuccess {String} username Username of the User.
+ * @apiSuccess {String} email Email of the User.
+ * @apiSuccess {String} score Score of the User.
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *        "username": "test",
+ *         "email": "test@test.com",
+ *         "score": 0
+ *    }
+ *
+ *
+ * @apiError UserNotFound The User was not found.
+ * @apiErrorExample Error-Response:
+ *    HTTP/1.1 404 Not found
+ *    {
+ *        "error": "UserNotFound"
+ *    }
+ * */
+
+app.get("/api/user/:user", (req, res) => {
+  users_module.User.findOne({ username: req.params.user })
+    .then( (user) => {
+      if (!user) {
+        res.status(404).send({success: false, message: 'User not found.'});
+      }
+      else {
+			res.status(200).send({success: true, username: user.username, email: user.email, score: user.score});
+      }
+	})
+	.catch( (err) => {
+	  res.json({success: false, message: err});
+	});
+});
+
+// #############################################################################
+// END OF REST API 
+// #############################################################################
+
+app.get("/docs", (req, res) => {
+  res.sendFile(path.join(__dirname, '/docs/index.html'));
+})
 
 app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
