@@ -6,7 +6,7 @@ services:
       - "80:80"
     container_name: "nginx"
     networks:
-      - app
+      - app    
 
   node:
     build: "./containers/node"
