@@ -21,7 +21,6 @@ app.use(session({
 
 //static files
 app.use(express.static(path.join(__dirname, '/static')));
-app.use(express.static(path.join(__dirname, '/docs')));
 
 // Session-persisted message middleware
 app.use(function(req, res, next){
@@ -264,7 +263,7 @@ app.get("/api/user/:user", (req, res) => {
 // #############################################################################
 
 app.get("/docs", (req, res) => {
-  res.sendFile(path.join(__dirname, '/docs/index.html'));
+  res.sendFile(path.join(__dirname, '/static/docs/docs.html'));
 })
 
 app.listen(3000, () => {
