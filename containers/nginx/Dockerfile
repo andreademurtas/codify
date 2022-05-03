@@ -1,5 +1,5 @@
 FROM nginx:latest
 COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./domain.csr /etc/nginx/domain.csr
-COPY ./domain.key /etc/nginx/domain.key
+COPY ./cert.pem /etc/nginx/cert.pem
+COPY ./key.pem /etc/nginx/key.pem
 EXPOSE 80
