@@ -20,7 +20,8 @@
 	"bcryptjs": "latest",
 	"body-parser": "latest",
 	"mongoose": "latest",
-    	"express-session": "latest"
+    	"express-session": "latest",
+  	"apidoc": "latest"
   },
   "author": "Andrea De Murtas",
   "contributors": [
@@ -31,5 +32,9 @@
   "bugs": {
     "url": "https://github.com/andreademurtas/codify/issues"
   },
-  "homepage": "https://github.com/andreademurtas/codify#readme"
+  "homepage": "https://github.com/andreademurtas/codify#readme",
+  "apidoc": {
+    "title": "codify",
+	"url": "http://ec2-107-23-144-168.compute-1.amazonaws.com/"
+  }
 }
