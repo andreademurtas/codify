@@ -146,6 +146,48 @@ app.post('/login', (req, res, next) => {
   });
 });
 
+
+app.get('/login-google', (req, res) => {
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost:3000/googlecallback&client_id="+process.env.G_CLIENT_ID);
+});
+
+app.get('/googlecallback', (req, res) => {
+  if (req.query.code!=undefined){  
+    res.redirect('gtoken?code='+req.query.code)
+  }
+  else{
+    res.send('Errore durante la richiesta del code di Google');
+  }
+});
+
+app.get('/gtoken', (req, res) => {
+  var url = 'https://www.googleapis.com/oauth2/v3/token';
+  var formData = {
+    code: req.query.code,
+    client_id: process.env.G_CLIENT_ID,
+    client_secret: process.env.G_CLIENT_SECRET,
+    redirect_uri: "http://localhost:3000/googlecallback",
+    grant_type: 'authorization_code'
+  }
+
+  request.post({url: url, form: formData}, (error, response, body) => {
+    if (error){
+      console.log(error);
+    }
+    var info = JSON.parse(body);
+    if(info.error != undefined){
+      res.send(info.error);
+    }
+    else{
+      req.session.google_token = info.access_token;
+      console.log("Il token di google è: "+req.session.google_token);
+      res.redirect('/signup-google');
+    }
+  });
+
+});
+
+
 app.get('/logout', function(req, res){
   // destroy the user's session to log them out
   // will be re-created next request
