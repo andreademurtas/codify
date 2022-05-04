@@ -219,7 +219,7 @@ app.get('/registration-google', (req, res) => {
       console.log(utente)
     }
     // va salvato l'utente o va effettuato il login con le credenziali google, dove l'username può essere la email e la password il token
-    res.redirect('/')
+    res.redirect('/')   //da cambiare
   });
 });
 
