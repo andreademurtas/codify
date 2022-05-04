@@ -149,7 +149,7 @@ app.post('/login', (req, res, next) => {
 
 
 app.get('/login-google', (req, res) => {
-  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost/googlecallback&client_id="+process.env.G_CLIENT_ID);
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
 app.get('/googlecallback', (req, res) => {
   if (req.query.code!=undefined){  
@@ -166,7 +166,7 @@ app.get('/gtoken', (req, res) => {
     code: req.query.code,
     client_id: process.env.G_CLIENT_ID,
     client_secret: process.env.G_CLIENT_SECRET,
-    redirect_uri: "http://localhost/googlecallback",
+    redirect_uri: "https://www.codify.rocks/googlecallback",
     grant_type: 'authorization_code'
   }
 
@@ -207,20 +207,20 @@ app.get('/registration-google', (req, res) => {
     }
     else{
       var utente = {
-        id:	data.id,
-        email:	data.email,
-        verified_email:	data.verified_email,
-        name:	data.name,
-        given_name:	data.given_name,
-        family_name:	data.family_name,
-        picture:	data.picture,
-        locale:	data.locale,
+        "id":	data.id,
+        "email":	data.email,
+        "verified_email":	data.verified_email,
+        "name":	data.name,
+        "given_name":	data.given_name,
+        "family_name":	data.family_name,
+        "picture":	data.picture,
+        "locale":	data.locale,
       }
       console.log(utente)
     }
     // va salvato l'utente o va effettuato il login con le credenziali google, dove l'username può essere la email e la password il token
-    res.redirect('/')
   });
+  try{res.redirect('/challenges')}catch(e){console.log(e);}
 });
 
 
