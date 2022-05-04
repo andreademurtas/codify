@@ -149,7 +149,8 @@ app.post('/login', (req, res, next) => {
 
 
 app.get('/login-google', (req, res) => {
-  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
+  //res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
 app.get('/googlecallback', (req, res) => {
   if (req.query.code!=undefined){  
@@ -166,7 +167,8 @@ app.get('/gtoken', (req, res) => {
     code: req.query.code,
     client_id: process.env.G_CLIENT_ID,
     client_secret: process.env.G_CLIENT_SECRET,
-    redirect_uri: "https://www.codify.rocks/googlecallback",
+    //redirect_uri: "https://www.codify.rocks/googlecallback",
+    redirect_uri: "http://localhost/googlecallback",
     grant_type: 'authorization_code'
   }
 
@@ -196,7 +198,8 @@ app.get('/registration-google', (req, res) => {
   var g_token = req.session.google_token;
   var data_url = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token='+g_token;
   // var headers = {'Authorization': 'Bearer '+g_token};
-  request.get({url: data_url}, (err, res, body) => {
+  var utente;
+  request.get({url: data_url}, (err, resp, body) => {
     if (err){
       console.log(err);
     }
@@ -206,7 +209,7 @@ app.get('/registration-google', (req, res) => {
       res.send(data.error);
     }
     else{
-      var utente = {
+      utente = {
         "id":	data.id,
         "email":	data.email,
         "verified_email":	data.verified_email,
@@ -219,8 +222,39 @@ app.get('/registration-google', (req, res) => {
       console.log(utente)
     }
     // va salvato l'utente o va effettuato il login con le credenziali google, dove l'username può essere la email e la password il token
-  });
-  try{res.redirect('/challenges')}catch(e){console.log(e);}
+    users_module.User.exists({ username: utente.email }, (err, exists) => {
+      if (err) {
+	    res.json({success: false, message: err});
+	    return;
+	  }
+      if (exists) {
+        req.session.regenerate(function(err) {
+		  console.log("Got here: req.session.regenerate after exists");
+          req.session.user = utente.email;
+		  req.session.success = 'Authenticates as' + utente.email;
+          res.redirect("/challenges");
+		});
+	  }
+      else {
+        users_module.User.create({
+	      username: utente.email,
+	      email: utente.email,
+	      password: g_token,
+	      score: 0
+	    }).then( (user) => {
+	      req.session.regenerate(function(err) {
+		      console.log("Got here: req.session.regenerate after creating user");
+	          req.session.user = user;
+			  req.session.success = 'Authenticates as' + user.username;
+	          res.redirect("/challenges");
+	      });
+        }).catch( (err) => { 
+		    console.log(err);
+	        return;
+	      });
+	    }
+	  });
+    });
 });
 
 
