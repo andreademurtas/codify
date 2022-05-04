@@ -53,9 +53,9 @@ button:hover {
 .sign:hover{
   color: #333;
 }
-.g-signin2{
+/* .g-signin2{
   margin-top: 10px;
-}
+} */
 .login_esterno{
     margin-left: 0.666667rem;
 }
@@ -104,7 +104,7 @@ button:hover {
   box-shadow: 0 0 0 1px #0f9dd7;
 }
   
-.signup-form-btn, .btn-git{
+.signup-form-btn, .btn-git, .btn-google{
     margin-left: auto;
     margin-right: auto;
     border: 2px solid rgb(166,166,166);
@@ -124,7 +124,7 @@ button:hover {
 
 }
 
-.signup-form-btn:hover, .btn-git:hover{
+.signup-form-btn:hover, .btn-git:hover, .btn-google:hover{
   color: rgb(255, 255, 255);
   background-color: rgb(237, 34, 93);
   border-color: rgb(237, 34, 93);
@@ -176,6 +176,6 @@ textarea:focus, input:focus {
 svg{
   color: #4d4d4d;
 }
-.g-signin2{
+/* .g-signin2{
 margin-left: 20%;
-}
+} */

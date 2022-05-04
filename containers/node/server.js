@@ -1,10 +1,12 @@
 const express = require('express');
 const path = require('path');
+const request = require('request');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
 const session = require('express-session');
 const crypto = require('crypto');
+try{require("dotenv").config();}catch(e){console.log(e);}
 
 const app = express(); // create an instance of an express app
 
@@ -147,11 +149,8 @@ app.post('/login', (req, res, next) => {
 
 
 app.get('/login-google', (req, res) => {
-  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost:3000/googlecallback&client_id="+process.env.G_CLIENT_ID);
-});
-// https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost:3000/googlecallback&client_id=996105682111-rlgqddnstfarb6h2uauogdqkpgrfc2r2.apps.googleusercontent.com 
-// https://www.googleapis.com/auth/calendar&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost:3000/googlecallback&client_id=996105682111-rlgqddnstfarb6h2uauogdqkpgrfc2r2.apps.googleusercontent.com
-
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost/googlecallback&client_id="+process.env.G_CLIENT_ID);
+}); 
 app.get('/googlecallback', (req, res) => {
   if (req.query.code!=undefined){  
     res.redirect('gtoken?code='+req.query.code)
@@ -167,25 +166,61 @@ app.get('/gtoken', (req, res) => {
     code: req.query.code,
     client_id: process.env.G_CLIENT_ID,
     client_secret: process.env.G_CLIENT_SECRET,
-    redirect_uri: "http://localhost:3000/googlecallback",
+    redirect_uri: "http://localhost/googlecallback",
     grant_type: 'authorization_code'
   }
 
   request.post({url: url, form: formData}, (error, response, body) => {
     if (error){
       console.log(error);
+      alert(error);
     }
     var info = JSON.parse(body);
+    console.log("Info:");
+    console.log(info);
     if(info.error != undefined){
       res.send(info.error);
     }
     else{
       req.session.google_token = info.access_token;
       console.log("Il token di google è: "+req.session.google_token);
-      res.redirect('/signup-google');
+      res.redirect('/registration-google');
     }
   });
+});
 
+app.get('/registration-google', (req, res) => {
+  if(req.session.google_token == undefined){
+    res.send('Error');
+  }
+  var g_token = req.session.google_token;
+  var data_url = 'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token='+g_token;
+  // var headers = {'Authorization': 'Bearer '+g_token};
+  request.get({url: data_url}, (err, res, body) => {
+    if (err){
+      console.log(err);
+    }
+    var data = JSON.parse(body);
+    console.log(data);
+    if(data.error != undefined){
+      res.send(data.error);
+    }
+    else{
+      var utente = {
+        "id":	data.id,
+        "email":	data.email,
+        "verified_email":	data.verified_email,
+        "name":	data.name,
+        "given_name":	data.given_name,
+        "family_name":	data.family_name,
+        "picture":	data.picture,
+        "locale":	data.locale,
+      }
+      console.log(utente)
+    }
+    // va salvato l'utente o va effettuato il login con le credenziali google, dove l'username può essere la email e la password il token
+    res.redirect('/challenges')   //da cambiare
+  });
 });
 
 

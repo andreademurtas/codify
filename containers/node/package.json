@@ -17,10 +17,12 @@
   ],
   "dependencies": {
     "express": "latest",
-	"bcryptjs": "latest",
-	"body-parser": "latest",
-	"mongoose": "latest",
-    	"express-session": "latest",
+    "bcryptjs": "latest",
+    "body-parser": "latest",
+    "dotenv": "latest",
+    "request": "latest",
+    "mongoose": "latest",
+    "express-session": "latest",
   	"apidoc": "latest"
   },
   "author": "Andrea De Murtas",
