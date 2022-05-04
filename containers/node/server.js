@@ -207,19 +207,19 @@ app.get('/registration-google', (req, res) => {
     }
     else{
       var utente = {
-        id:	data.id,
-        email:	data.email,
-        verified_email:	data.verified_email,
-        name:	data.name,
-        given_name:	data.given_name,
-        family_name:	data.family_name,
-        picture:	data.picture,
-        locale:	data.locale,
+        "id":	data.id,
+        "email":	data.email,
+        "verified_email":	data.verified_email,
+        "name":	data.name,
+        "given_name":	data.given_name,
+        "family_name":	data.family_name,
+        "picture":	data.picture,
+        "locale":	data.locale,
       }
       console.log(utente)
     }
     // va salvato l'utente o va effettuato il login con le credenziali google, dove l'username può essere la email e la password il token
-    res.redirect('/')   //da cambiare
+    res.redirect('/challenges')   //da cambiare
   });
 });
 

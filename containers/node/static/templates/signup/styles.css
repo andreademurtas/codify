@@ -53,9 +53,9 @@ button:hover {
 .sign:hover{
   color: #333;
 }
-.g-signin2{
+/* .g-signin2{
   margin-top: 10px;
-}
+} */
 .login_esterno{
     margin-left: 0.666667rem;
 }
@@ -176,6 +176,6 @@ textarea:focus, input:focus {
 svg{
   color: #4d4d4d;
 }
-.g-signin2{
+/* .g-signin2{
 margin-left: 20%;
-}
+} */
