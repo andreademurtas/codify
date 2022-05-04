@@ -9,6 +9,6 @@ COPY ./static ./static
 COPY ./docs ./docs
 COPY ./.env ./.env
 RUN npm install --production
-RUN node_modules/apidoc/bin/apidoc -i . -o ./docs
+RUN node_modules/apidoc/bin/apidoc -i . -o ./static/docs
 EXPOSE 3000
 CMD ["node", "server.js"]
