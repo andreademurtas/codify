@@ -149,7 +149,7 @@ app.post('/login', (req, res, next) => {
 
 
 app.get('/login-google', (req, res) => {
-  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost/googlecallback&client_id="+process.env.G_CLIENT_ID);
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
 app.get('/googlecallback', (req, res) => {
   if (req.query.code!=undefined){  
