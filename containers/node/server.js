@@ -166,7 +166,7 @@ app.get('/gtoken', (req, res) => {
     code: req.query.code,
     client_id: process.env.G_CLIENT_ID,
     client_secret: process.env.G_CLIENT_SECRET,
-    redirect_uri: "http://localhost/googlecallback",
+    redirect_uri: "https://www.codify.rocks/googlecallback",
     grant_type: 'authorization_code'
   }
 
