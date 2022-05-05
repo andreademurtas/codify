@@ -8,6 +8,7 @@ const session = require('express-session');
 const crypto = require('crypto');
 try{require("dotenv").config();}catch(e){console.log(e);}
 const { exec } = require("child_process");
+const { networkInterfaces } = require('os');
 
 const app = express(); // create an instance of an express app
 const nets = networkInterfaces();
@@ -150,20 +151,20 @@ app.post('/login', (req, res, next) => {
   });
 });
 
-
+var host = "";
 app.get('/login-google', (req, res) => {
-  var host = "";
   exec("whoami", (err, stdout, stderr) => {
     if (err) {
       console.log(err);
       return;
     }
-    if (console.log(stdout).includes("ubuntu")) {
+    if (stdout.includes("ubuntu")) {
       host = "www.rockify.rocks";
 	}
 	else {
 	  host = "localhost";
 	}
+		  console.log(host);
   });
   //res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
   res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://" + host + "/googlecallback&client_id="+process.env.G_CLIENT_ID);
