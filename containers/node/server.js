@@ -180,6 +180,7 @@ app.get('/googlecallback', (req, res) => {
 
 app.get('/gtoken', (req, res) => {
   var url = 'https://www.googleapis.com/oauth2/v3/token';
+  console.log(host);
   var formData = {
     code: req.query.code,
     client_id: process.env.G_CLIENT_ID,
