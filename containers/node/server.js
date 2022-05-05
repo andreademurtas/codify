@@ -7,8 +7,11 @@ const users_module = require('./user');
 const session = require('express-session');
 const crypto = require('crypto');
 try{require("dotenv").config();}catch(e){console.log(e);}
+const { exec } = require("child_process");
 
 const app = express(); // create an instance of an express app
+const nets = networkInterfaces();
+const results = Object.create(null);
 
 //middleware
 app.use(body_parser.json()); // support json encoded bodies
@@ -149,8 +152,21 @@ app.post('/login', (req, res, next) => {
 
 
 app.get('/login-google', (req, res) => {
+  var host = "";
+  exec("whoami", (err, stdout, stderr) => {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    if (console.log(stdout).includes("ubuntu")) {
+      host = "www.rockify.rocks";
+	}
+	else {
+	  host = "localhost";
+	}
+  });
   //res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
-  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost/googlecallback&client_id="+process.env.G_CLIENT_ID);
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://" + host + "/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
 app.get('/googlecallback', (req, res) => {
   if (req.query.code!=undefined){  
@@ -168,7 +184,7 @@ app.get('/gtoken', (req, res) => {
     client_id: process.env.G_CLIENT_ID,
     client_secret: process.env.G_CLIENT_SECRET,
     //redirect_uri: "https://www.codify.rocks/googlecallback",
-    redirect_uri: "http://localhost/googlecallback",
+    redirect_uri: "http://" + host + "/googlecallback",
     grant_type: 'authorization_code'
   }
 
