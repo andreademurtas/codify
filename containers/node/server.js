@@ -158,7 +158,7 @@ app.get('/login-google', (req, res) => {
       console.log(err);
       return;
     }
-    if (stdout.includes("ubuntu")) {
+    if (stdout.includes("ubuntu") === true) {
       host = "www.rockify.rocks";
 	}
 	else {
