@@ -159,7 +159,7 @@ app.get('/login-google', (req, res) => {
       return;
     }
     if (stdout.includes("root") === true) {
-      host = "www.rockify.rocks";
+      host = "www.codify.rocks";
 	}
 	else {
 	  host = "localhost";
