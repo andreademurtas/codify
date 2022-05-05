@@ -1,4 +1,5 @@
 #!/bin/bash
 cd /home/ubuntu/app
+docker system prune -a -f
 docker-compose build
 docker-compose up -d
