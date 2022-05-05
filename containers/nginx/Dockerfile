@@ -1,6 +1,6 @@
 FROM nginx:latest
 COPY ./nginx.conf /etc/nginx/nginx.conf
-COPY ./cert.pem /etc/nginx/cert.pem
-COPY ./key.pem /etc/nginx/key.pem
+COPY ./fullchain.pem /etc/nginx/fullchain.pem
+COPY ./privkey.pem /etc/nginx/privkey.pem
 EXPOSE 80
 EXPOSE 443
