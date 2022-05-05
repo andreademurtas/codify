@@ -301,11 +301,11 @@ app.get('/user', restrict, function(req,res){
 
 
 /**
- * @api {get} /api/users/:id Request User information
+ * @api {get} /api/users/username Request User information
  * @apiName GetUser
  * @apiGroup User
  *
- * @apiParam {Number} id Users username.
+ * @apiParam {Number} username Users username.
  *
  *
  * @apiSuccess {String} username Username of the User.
@@ -321,12 +321,18 @@ app.get('/user', restrict, function(req,res){
  *    }
  *
  *
- * @apiError UserNotFound The User was not found.
+ * @apiError Message Error message.
  * @apiErrorExample Error-Response:
  *    HTTP/1.1 404 Not found
  *    {
- *        "error": "UserNotFound"
+ *        "message": "UserNotFound"
  *    }
+ *
+ * @apiErrorExample Error-Response:
+ *   HTTP/1.1 500 Not found
+ *   {
+ *        "message": "InternalServerError"
+ *   }
  * */
 
 app.get("/api/user/:user", (req, res) => {
@@ -340,8 +346,56 @@ app.get("/api/user/:user", (req, res) => {
       }
 	})
 	.catch( (err) => {
-	  res.json({success: false, message: err});
+	  res.status(500).json({success: false, message: "Internal server error"});
 	});
+});
+
+
+/**
+ * @api {post} /api/users Request User information
+ * @apiName CreateUser
+ * @apiGroup User
+ *
+ * @apiSuccess {String} Message Message of success.
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *        "message": "User created"
+ *    }
+ *
+ *
+ * @apiError Message Error message.
+ * @apiErrorExample Error-Response:
+ *    HTTP/1.1 409 Not found
+ *    {
+ *        "error": "UserNotFound"
+ *    }
+ *
+ * @apiErrorExample Error-Response:
+ *   HTTP/1.1 500 Not found
+ *   {
+ *    "error": "Internal server error"
+ *   }
+ * */
+
+app.post("/api/user/:user", (req, res) => {
+  users.User.findOne({ username: req.body.username })
+    .then( (user) => {
+      if (user) { res.status(409).send({success: false, message: 'User already exists.'}); }
+      else { 
+	users.User.create({
+	  username: req.body.username,
+	  email: req.body.email,
+      password: bcrypt.hashSync(req.body.password, 10),
+	  score: 0
+	}).then( (user) => {
+	  res.status(200).send({success: true, message: 'User created.'});
+	}).catch( (err) => {
+	  res.status(500).json({success: false, message: "Internal server error"});
+	});
+      }
+	})
 });
 
 // #############################################################################
