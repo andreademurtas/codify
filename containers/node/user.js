@@ -31,6 +31,11 @@ const User = new Schema({
 		password: {
 			type: String,
             required: true,
+		},
+		score: {
+			type: Number,
+		    default: 0,
+		    required: true,
 		}
 	}, {collection: 'users'});
 

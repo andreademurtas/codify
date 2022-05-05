@@ -315,7 +315,7 @@ app.get('/user', restrict, function(req,res){
  * @apiSuccessExample Success-Response:
  *    HTTP/1.1 200 OK
  *    {
- *        "username": "test",
+ *         "username": "test",
  *         "email": "test@test.com",
  *         "score": 0
  *    }
