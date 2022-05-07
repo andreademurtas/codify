@@ -37,9 +37,10 @@ jobs:
         with:
           time: '60s'
       #Step 4
-      - name: Test
+      - name: Test Setup
         uses: actions/setup-node@v3
-        id: test
+        id: testSetup
+      #Step 5
+      - name: Test run
         run: |
           npm ci && npm test
-
