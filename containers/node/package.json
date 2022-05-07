@@ -4,7 +4,7 @@
   "description": "An interactive platform to learn coding by completing various challenges",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test.js"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,9 @@
     "request": "latest",
     "mongoose": "latest",
     "express-session": "latest",
-  	"apidoc": "latest"
+  	"apidoc": "latest",
+	"chai": "latest",
+	"axios": "latest"
   },
   "author": "Andrea De Murtas",
   "contributors": [

@@ -31,3 +31,16 @@ jobs:
             --deployment-group-name DeployCodifyGroup \
             --deployment-config-name CodeDeployDefault.OneAtATime \
             --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+      #Step 3
+      - name: Wait
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '60s'
+      #Step 4
+      - name: Test
+        uses: actions/checkout@v3
+        uses: actions/setup-node@v3
+        id: test
+        run: |
+          npm ci && npm test
+

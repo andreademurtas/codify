@@ -8,6 +8,7 @@ COPY ./user.js ./user.js
 COPY ./static ./static
 COPY ./.env ./.env
 RUN npm install --production
+RUN npm install -g mocha
 RUN node_modules/apidoc/bin/apidoc -i . -o ./static/docs
 EXPOSE 3000
 CMD ["node", "server.js"]

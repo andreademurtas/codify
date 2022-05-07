@@ -1,5 +1,7 @@
 #!/bin/bash
 cd /home/ubuntu/app
+npm install
+docker-compose down
 docker system prune -a -f
 docker-compose build
 docker-compose up -d

@@ -69,6 +69,15 @@ function restrict(req, res, next) {
   }
 }
 
+function restrictAPI(req, res, next) {
+  if (req.session.user) {
+    next();
+  }
+  else {
+    res.status(401).json({error: "Unauthorized"});
+  }
+};
+
 users_module.mongoconnect();
 
 app.get('/', (req, res) => {
@@ -283,16 +292,12 @@ app.get('/logout', function(req, res){
   });
 });
 
-app.get('/restricted', restrict, function(req, res){
-  res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
-});
-
 app.get('/challenges', (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
 });
 
-app.get('/user', restrict, function(req,res){
-  res.send("<h1>hello</h1>");
+app.get("/profile", restrict, (req, res) => {
+  res.sendFile(path.join(__dirname, '/static/templates/profilo/profilo.html'));
 });
 
 // #############################################################################
@@ -321,25 +326,20 @@ app.get('/user', restrict, function(req,res){
  *    }
  *
  *
- * @apiError Message Error message.
+ * @apiError error User not found.
  * @apiErrorExample Error-Response:
  *    HTTP/1.1 404 Not found
  *    {
- *        "message": "UserNotFound"
+ *        "error": "User not found"
  *    }
  *
- * @apiErrorExample Error-Response:
- *   HTTP/1.1 500 Not found
- *   {
- *        "message": "InternalServerError"
- *   }
  * */
 
-app.get("/api/user/:user", (req, res) => {
+app.get("/api/users/:user", (req, res) => {
   users_module.User.findOne({ username: req.params.user })
     .then( (user) => {
       if (!user) {
-        res.status(404).send({success: false, message: 'User not found.'});
+        res.status(404).send({success: false, error: 'User not found.'});
       }
       else {
 			res.status(200).send({success: true, username: user.username, email: user.email, score: user.score});
@@ -352,7 +352,7 @@ app.get("/api/user/:user", (req, res) => {
 
 
 /**
- * @api {post} /api/users Request User information
+ * @api {post} /api/users/create Request User information
  * @apiName CreateUser
  * @apiGroup User
  *
@@ -365,26 +365,21 @@ app.get("/api/user/:user", (req, res) => {
  *    }
  *
  *
- * @apiError Message Error message.
+ * @apiError Message User already exists.
  * @apiErrorExample Error-Response:
  *    HTTP/1.1 409 Not found
  *    {
- *        "error": "UserNotFound"
+ *        "error": "User already exists"
  *    }
  *
- * @apiErrorExample Error-Response:
- *   HTTP/1.1 500 Not found
- *   {
- *    "error": "Internal server error"
- *   }
  * */
 
-app.post("/api/user/:user", (req, res) => {
-  users.User.findOne({ username: req.body.username })
+app.post("/api/users/create", (req, res) => {
+  users_module.User.findOne({ username: req.body.username })
     .then( (user) => {
-      if (user) { res.status(409).send({success: false, message: 'User already exists.'}); }
+      if (user) { res.status(409).send({success: false, error: 'User already exists.'}); }
       else { 
-	users.User.create({
+	users_module.User.create({
 	  username: req.body.username,
 	  email: req.body.email,
       password: bcrypt.hashSync(req.body.password, 10),
@@ -396,6 +391,59 @@ app.post("/api/user/:user", (req, res) => {
 	});
       }
 	})
+});
+
+
+/**
+ * @api {post} /api/users/delete Delete User
+ * @apiName DeleteUser
+ * @apiGroup User
+ *
+ * @apiSuccess {String} Message Message of success.
+ *
+ * @apiSuccessExample Success-Response:
+ *    HTTP/1.1 200 OK
+ *    {
+ *        "message": "User deleted"
+ *    }
+ *
+ *
+ * @apiError Message User not found.
+ * @apiErrorExample Error-Response:
+ *    HTTP/1.1 404 Not found
+ *    {
+ *        "error": "User not found"
+ *    }
+ *
+ * @apiError Message Wrong password.
+ * @apiErrorExample Error-Response:
+ *   HTTP/1.1 401 Wrong password
+ *   {
+ *      "error": "Wrong password"
+ *   }
+ * */
+
+app.delete("/api/users/delete", (req, res) => {
+  console.log(req.body);
+  users_module.User.findOne({ username: req.body.username })
+    .then( (user) => {
+      if (!user) { res.status(404).send({success: false, error: 'User not found.'}); }
+      else { 
+		if (!bcrypt.compareSync(req.body.password, user.password)) {
+		  res.status(401).send({success: false, error: 'Wrong password.'});
+		}
+		else {
+      	  users_module.User.remove({ username: req.body.username })
+      	    .then( (user) => {
+      	      res.status(200).send({success: true, message: 'User deleted.'});
+		    }).catch( (err) => {
+      	      res.status(500).json({success: false, message: "Internal server error"});
+		    });
+		}
+	  }
+	}).catch( (err) => {
+      res.status(500).json({success: false, message: "Internal server error"});
+	});
 });
 
 // #############################################################################
