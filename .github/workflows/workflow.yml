@@ -35,12 +35,16 @@ jobs:
       - name: Wait
         uses: jakejarvis/wait-action@master
         with:
-          time: '60s'
+          time: '180s'
       #Step 4
-      - name: Test Setup
+      - name: Test Setup1
         uses: actions/setup-node@v3
-        id: testSetup
+        id: testSetup1
       #Step 5
+      - name: Test Setup2
+        uses: actions/checkout@v3
+        id: testSetup2
+      #Step 6
       - name: Test run
         run: |
           sudo npm install -g mocha && npm install && npm ci && npm test
