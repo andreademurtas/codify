@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "<h1>Progetto Reti di Calcolatori</h1>",
   "main": "test.js",
-  "scripts": 
+  "scripts": { 
     "test": "mocha"
   },
   "repository": {

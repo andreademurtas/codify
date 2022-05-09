@@ -47,4 +47,4 @@ jobs:
       #Step 6
       - name: Test run
         run: |
-          sudo npm install -g mocha && npm install && npm ci && npm test
+          sudo npm install -g mocha && npm install && npm test
