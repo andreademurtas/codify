@@ -1,8 +1,11 @@
-#Codify
+# Codify
 
-![deployment and testing](https://github.com/andreademurtas/codify/actions/workflows/CI/CD+Pipeline/badge.svg)
+[![Deployment and Testing](https://github.com/andreademurtas/codify/actions/workflows/workflow.yml/badge.svg)](https://github.com/andreademurtas/codify/actions/workflows/workflow.yml)
 
 Codify è un'applicazione web dove puoi allenarti a risolvere problemi di informatica in vari linguaggi.
+
+## Schema del progetto
+![](https://raw.githubusercontent.com/andreademurtas/codify/main/diagrammaprogettoreti.png)
 
 ## Soddisfacimento dei requisiti
 - Il progetto fornisce un'API REST effettuare varie operazioni sugli utenti (reperire informazioni, creare, modificare, eliminare).
@@ -18,7 +21,7 @@ Codify è un'applicazione web dove puoi allenarti a risolvere problemi di inform
 ## Installazione ed esecuzione
 - git clone della repository;
 - nella directory principale eseguire 'docker-compose build' e 'docker-compose up' (accedendo come root); </li>
-- da browser visitare [localhost](https://localhost)
+- da browser visitare ![localhost](https://localhost)
 - Scegliere se registrarsi o effettuare il login;
 - Selezionare uno dei problemi e mettiti alla prova;
 - Guarda il tuo profilo per vedere quanti punti hai acquisito; 
