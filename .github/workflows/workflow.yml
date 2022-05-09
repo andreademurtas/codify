@@ -35,7 +35,7 @@ jobs:
       - name: Wait
         uses: jakejarvis/wait-action@master
         with:
-          time: '1s'
+          time: '180s'
       #Step 4
       - name: Test Setup1
         uses: actions/setup-node@v3
