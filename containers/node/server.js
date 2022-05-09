@@ -162,19 +162,7 @@ app.post('/login', (req, res, next) => {
 
 var host = "";
 app.get('/login-google', (req, res) => {
-  exec("whoami", (err, stdout, stderr) => {
-    if (err) {
-      console.log(err);
-      return;
-    }
-    if (stdout.includes("root") === true) {
-      host = "https://www.codify.rocks";
-	}
-	else {
-	  host = "http://localhost";
-	}
-		  console.log(host);
-  });
+      host = process.env.HOST_REDIRECT;
   //res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
   res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=" + host + "/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
@@ -204,14 +192,11 @@ app.get('/gtoken', (req, res) => {
       alert(error);
     }
     var info = JSON.parse(body);
-    console.log("Info:");
-    console.log(info);
     if(info.error != undefined){
       res.send(info.error);
     }
     else{
       req.session.google_token = info.access_token;
-      console.log("Il token di google è: "+req.session.google_token);
       res.redirect('/registration-google');
     }
   });
@@ -230,7 +215,6 @@ app.get('/registration-google', (req, res) => {
       console.log(err);
     }
     var data = JSON.parse(body);
-    console.log(data);
     if(data.error != undefined){
       res.send(data.error);
     }
@@ -245,7 +229,6 @@ app.get('/registration-google', (req, res) => {
         "picture":	data.picture,
         "locale":	data.locale,
       }
-      console.log(utente)
     }
     // va salvato l'utente o va effettuato il login con le credenziali google, dove l'username può essere la email e la password il token
     users_module.User.exists({ username: utente.email }, (err, exists) => {
@@ -255,8 +238,7 @@ app.get('/registration-google', (req, res) => {
 	  }
       if (exists) {
         req.session.regenerate(function(err) {
-		  console.log("Got here: req.session.regenerate after exists");
-          req.session.user = utente.email;
+          req.session.user = utente;
 		  req.session.success = 'Authenticates as' + utente.email;
           res.redirect("/challenges");
 		});
@@ -269,7 +251,6 @@ app.get('/registration-google', (req, res) => {
 	      score: 0
 	    }).then( (user) => {
 	      req.session.regenerate(function(err) {
-		      console.log("Got here: req.session.regenerate after creating user");
 	          req.session.user = user;
 			  req.session.success = 'Authenticates as' + user.username;
 	          res.redirect("/challenges");
@@ -298,6 +279,21 @@ app.get('/challenges', (req, res) => {
 
 app.get("/profile", restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/profilo/profilo.html'));
+});
+
+app.get("/userInfo", restrict, (req, res) => {
+  users_module.User.findOne({ username: req.session.user.email })
+    .then( (user) => {
+      if (!user) {
+        res.status(404).send({success: false, error: 'User not found.'});
+      }
+      else {
+			res.status(200).send({success: true, username: user.username, email: user.email, score: user.score});
+      }
+	})
+	.catch( (err) => {
+	  res.status(500).json({success: false, message: "Internal server error"});
+	});
 });
 
 // #############################################################################
@@ -424,7 +420,6 @@ app.post("/api/users/create", (req, res) => {
  * */
 
 app.delete("/api/users/delete", (req, res) => {
-  console.log(req.body);
   users_module.User.findOne({ username: req.body.username })
     .then( (user) => {
       if (!user) { res.status(404).send({success: false, error: 'User not found.'}); }

@@ -1,6 +1,6 @@
 # Codify
 
-[![Deployment and Testing](https://github.com/andreademurtas/codify/actions/workflows/workflow.yml/badge.svg)](https://github.com/andreademurtas/codify/actions/workflows/workflow.yml)
+[![CI/CD Pipeline](https://github.com/andreademurtas/codify/actions/workflows/workflow.yml/badge.svg)](https://github.com/andreademurtas/codify/actions/workflows/workflow.yml)
 
 Codify è un'applicazione web dove puoi allenarti a risolvere problemi di informatica in vari linguaggi.
 
@@ -35,4 +35,9 @@ npm install -g mocha && npm install && npm test
 Attenzione: si potrebbero riscontrare problemi di autorizzazioni. In questo caso, provare con:
 ```bash
 sudo npm install -g mocha && npm install && npm test
+```
+
+Una volta concluso lo step precedente, per far partire i test digitare:
+```bash
+mocha
 ```

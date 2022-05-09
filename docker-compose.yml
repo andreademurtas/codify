@@ -16,6 +16,8 @@ services:
       - app
       - db
       - mail
+    environment:
+      - HOST_REDIRECT
 
   mongodb:
     build: "./containers/mongo"
