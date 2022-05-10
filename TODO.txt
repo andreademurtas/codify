@@ -1,16 +1,13 @@
 - Homepage con interfaccia per navigare il sito (Thomas)
 - OAuth da collegare con database (Thomas, Andrea)
-- Profilo restricted solo per utenti loggati con punteggio ecc (Andrea)
+- Profilo restricted solo per utenti loggati con punteggio ecc (Andrea) (FATTO)
 - Pagina /challenges (dashboard) (Andrea, Thomas) 
-- Offrire api rest a terze parti con documentazione su apidoc (Andrea)
+- Offrire api rest a terze parti con documentazione su apidoc (Andrea) (FATTO)
 - Usare api google calendar per creare promemoria allenamento (Thomas)
-- https su nginx (Stefano)
+- https su nginx (Stefano) (FATTO)
 - protocolli asincroni, email momento del signup (amqp o websocket) (Stefano)
 - test base con mocha e chai (Stefano, Andrea)
 - corretto il fetching delle challenges (Thomas)
 - scrivere README (Thomas)
 - correggere api per codice (Thomas)
 - settare container per inviare mail con rabbit (Andrea) (FATTO)
-
-################################################################################
-FARE SEMPRE PULL PRIMA DI LAVORARE

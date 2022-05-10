@@ -20,7 +20,10 @@ Codify è un'applicazione web dove puoi allenarti a risolvere problemi di inform
 
 ## Installazione ed esecuzione
 - git clone della repository;
-- nella directory principale eseguire 'docker-compose build' e 'docker-compose up' (accedendo come root); </li>
+- nella directory principale eseguire: 
+  ```bash 
+    scripts/docker_pipeline.sh
+  ```;
 - da browser visitare ![localhost](https://localhost)
 - Scegliere se registrarsi o effettuare il login;
 - Selezionare uno dei problemi e mettiti alla prova;
