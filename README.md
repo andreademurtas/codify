@@ -23,7 +23,8 @@ Codify è un'applicazione web dove puoi allenarti a risolvere problemi di inform
 - nella directory principale eseguire: 
   ```bash 
     scripts/docker_pipeline.sh
-  ```;
+  ```
+  ;
 - da browser visitare ![localhost](https://localhost)
 - Scegliere se registrarsi o effettuare il login;
 - Selezionare uno dei problemi e mettiti alla prova;
