@@ -5,6 +5,7 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY ./server.js ./server.js
 COPY ./user.js ./user.js
+COPY ./challenges.js ./challenges.js
 COPY ./static ./static
 COPY ./.env ./.env
 RUN npm install --production

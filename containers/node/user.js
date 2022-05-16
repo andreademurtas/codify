@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 exports.mongoconnect = () => {
-  mongoose.connect('mongodb://root:example@mongodb/users', {
+  mongoose.connect('mongodb://root:example@mongodb/codify', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   }).then(() => {
