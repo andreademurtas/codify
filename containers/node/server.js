@@ -301,7 +301,7 @@ app.get("/getChallenges", (req, res) => {
   challenges_module.Challenge.find({})
     .then( (challenges) => {
       res.status(200).send({success: true, challenges: challenges});
-	})
+	}) //
     .catch( (err) => {
       res.status(500).json({success: false, message: "Internal server error"});
 	});
