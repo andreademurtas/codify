@@ -4,6 +4,7 @@ const request = require('request');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
+const challenges_module = require('./challenges');
 const session = require('express-session');
 const crypto = require('crypto');
 try{require("dotenv").config();}catch(e){console.log(e);}
@@ -293,6 +294,16 @@ app.get("/userInfo", restrict, (req, res) => {
 	})
 	.catch( (err) => {
 	  res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
+app.get("/getChallenges", (req, res) => {
+  challenges_module.Challenge.find({})
+    .then( (challenges) => {
+      res.status(200).send({success: true, challenges: challenges});
+	})
+    .catch( (err) => {
+      res.status(500).json({success: false, message: "Internal server error"});
 	});
 });
 

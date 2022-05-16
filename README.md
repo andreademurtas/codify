@@ -19,16 +19,17 @@ Codify è un'applicazione web dove puoi allenarti a risolvere problemi di inform
   implementati grazie a Mochajs e Chaijs
 
 ## Installazione ed esecuzione
-- git clone della repository;
+- git clone della repository
 - nella directory principale eseguire: 
+  
   ```bash 
     scripts/docker_pipeline.sh
+  
   ```
-  ;
 - da browser visitare ![localhost](https://localhost)
-- Scegliere se registrarsi o effettuare il login;
-- Selezionare uno dei problemi e mettiti alla prova;
-- Guarda il tuo profilo per vedere quanti punti hai acquisito; 
+- Scegliere se registrarsi o effettuare il login
+- Selezionare uno dei problemi e mettiti alla prova
+- Guarda il tuo profilo per vedere quanti punti hai acquisito 
 
 ## Test 
 Per testare l'applicazione una volta avviata, assicurarsi di aver installati sia Nodejs che npm, quindi posizionarsi nella root directory ed eseguire:
