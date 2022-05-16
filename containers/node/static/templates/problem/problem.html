@@ -24,11 +24,11 @@
                     </select>
                 </div>
                 <div class="col-1 my-1">
-                    <button id="button_run" class="button_run" onclick="excecute_request()">Run</button>
+                    <a class="btn" id="button_run" class="button_run" onclick="excecute_request()">Run</a>
                     <!-- <button id="button_run" class="btn btn-primary" onfocus="prevent()" onclick="try{excecute_request('PYTHON')}catch(e){alert(e)}">Run</button> -->
                 </div>
                 <div class="btn">
-                    <button id="button_check" onclick="check_result(n_problem)">Check</button>
+                    <a class="btn" id="button_check" onclick="check_result()">Check</a>
                 </div>
             </div>
         </form>
@@ -38,12 +38,11 @@
             <div class="col" id="iframecontainer">
                 <div id="iframe">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Problema</label>
-                    <iframe id="iframeCode"  title="problema"></iframe>
+                    <textarea id="iframeCode" idd="" title="problema" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="true"></textarea>
                 </div>
             </div>
 
             <div class="col" id="textareacontainer">
-                
                 <div id="textarea">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Editor</label>
                     <textarea id="textareaCode" autocorrect="off" autocapitalize="off" spellcheck="false" onfocus="get_tab()"></textarea>
@@ -62,18 +61,14 @@
         
     <div class="container" id="container_3">
         <div class="row">
-            <a onclick="get_problem(-1)">
+            <a class="previous btn" onclick="get_problem(parseInt($('#iframeCode').attr('idd'))-1)">
                 <div class="col" id="previous_problem">
-                    <button class="btn">
-                        Previous problem
-                    </button>
+                    Previous problem
                 </div>
             </a>
-            <a onclick="get_problem(1)">
+            <a class="next btn" onclick="get_problem(parseInt($('#iframeCode').attr('idd'))+1)">
                 <div class="col" id="next_problem">
-                    <button class="btn" id="next_problem">
-                        Next problem
-                    </button>
+                    Next problem
                 </div>
             </a>
         </div>
@@ -82,27 +77,12 @@
     <script type="application/javascript" src="js/bootstrap.min.js"></script>
     <script type="application/javascript" src="scripts/script.js" ></script>
     <script type="application/javascript" src="scripts/api.js" ></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> <!--Serve per poter fare le richieste alle api con ajax-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-		$(document).ready(function(){
-          var n_problem;
-          function get_problem(dif=0){
-            var url = window.location.href;
-            n_problem = parseInt(url.split('_')[1])+dif;
-            if (n_problem<=0 || n_problem > 3){
-              alert('Nessun problema');
-              return;
-            }
-            n_problem = n_problem.toString()
-            var iframe = document.getElementById('iframeCode');
-            window.location.href = url.split('_')[0] + '_' + n_problem;
-            iframe.src = 'templates/problem/challenge/challenge_' + n_problem + '.txt';
-          }
+        window.addEventListener('load', (event) => {
+            get_problem();
+            prevent();
         });
-    </script>
-    <script>
-        window.onload(get_problem());
-        window.onload(prevent());
     </script>
 </body>
 </html>

@@ -45,27 +45,47 @@ function cambio_linguaggio(linguaggio){
 }
 
 
-function check_result(n_problem){
-    var x = document.getElementById('textarea_outputCode');
-    var result = x.value.trim();
-    switch (n_problem){
-        case '1':
-            if (result == '15'){
-                alert('Risultato esatto!! :)');
-                break;
+
+function get_problem(id=1){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            // console.log(res.description)
+            $("#iframeCode")[0].value = res.description;
+            $("#iframeCode").attr("idd", id.toString());
+            if (id == 1){
+                $(".previous").attr("style", "display:none;");
             }
-        case '2':
-            if (result == '[2, 3, 5, 7 ,11, 13, 17]'){
-                alert('Risultato esatto!! :)');
-                break;
+            else{
+                $(".previous").attr("style", "display:block;");
             }
-        case '3':
-            if (result == 'CoDiFy'){
-                alert('Risultato esatto!! :)');
-                break;
+            if (id == 3){
+                $(".next").attr("style", "display:none;");
             }
-        default:
-            alert('Risultato sbagliato');
-            break;
-    }
+            else{
+                $(".next").attr("style", "display:block;");
+            }
+        }
+    };
+    xhttp.open("GET", '/getChallenge?id='+id.toString(), true);
+    xhttp.send();
+}
+
+function check_result(){
+    var id = $("#iframeCode").attr("idd");
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var res = JSON.parse(this.responseText);
+            if ($("#textarea_outputCode")[0].value.trim() == res.answer){
+                alert("Risultato esatto");
+                // invia al server che l'utente ha risolto la challenge
+            } else{
+                alert("Risultato sbagliato");
+            }
+        }
+    };
+    xhttp.open("GET", '/getChallenge?id='+id.toString(), true);
+    xhttp.send();
 }

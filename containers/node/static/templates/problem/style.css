@@ -17,7 +17,7 @@ textarea[id="textarea_outputCode"]{
     max-height: 200px;
 }
 
-iframe[id="iframeCode"]{
+textarea[id="iframeCode"]{
     background-color: #fff;
     border-radius: 5px;
     width: 100%;
@@ -33,18 +33,19 @@ textarea[id="textareaCode"]{
 textarea:focus{
     outline: none;
 }
-body, textarea, iframe{
+body, textarea{
     font-family: monospace;
 }
 textarea{
+    padding: 1rem;
     border-color: #686868;
     border-radius: 3px;
     /* display: block; */
 }
 
-button{
+a{
     background-color: rgb(240,240,240);
     border-radius: 3px;
     border-color: #686868;
-    padding: 0.83333rem;
+    padding: 0.5rem;
 }

@@ -307,6 +307,17 @@ app.get("/getChallenges", (req, res) => {
 	});
 });
 
+app.get("/getChallenge", (req, res) => {
+  var id = req.query.id;
+  challenges_module.Challenge.findOne({'title': 'Challenge '+id.toString()})
+    .then( (challenge) => {
+      res.status(200).send(challenge);
+	}) //
+    .catch( (err) => {
+      res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
 // #############################################################################
 // SECTION FOR REST API
 // #############################################################################

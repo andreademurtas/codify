@@ -38,7 +38,7 @@ function get_status(link){
     $.ajax({
         type: 'POST',
         url: link,
-        headers:{"client-secret": CLIENT_SECRET},
+        headers:{"client-secret": CLIENT_SECRET, 'Access-Control-Allow-Origin': '*'},
         success: function(response){
             if (response.request_status.code != "REQUEST_COMPLETED"){
                 get_status(link);

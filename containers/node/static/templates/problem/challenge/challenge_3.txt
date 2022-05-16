@@ -1,1 +1,0 @@
-Stampa a schermo la parola 'codify' dove le lettere sono alternate tra maiuscole e minuscole, partendo dalle maiuscole

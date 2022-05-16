@@ -1,1 +1,0 @@
-Stampa a schermo i primi 7 numeri primi
