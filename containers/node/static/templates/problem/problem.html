@@ -13,7 +13,7 @@
     <div class="container" id="parte_bottoni">
         <!-- <h1>Parte bottoni</h1> -->
         <form>
-            <div class="form-row align-items-center">
+            <div class="form-row align-items-end">
                 <div class="col-4 my-1">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Language</label>
                     <select class="custom-select mr-sm-2" id="language">
@@ -29,12 +29,13 @@
                         <option value="swift">Swift</option>
                     </select>
                 </div>
-                <div class="col-1 my-1">
-                    <a class="btn" id="button_run" class="button_run" onclick="getOutput()">Run</a>
-                    <!-- <button id="button_run" class="btn btn-primary" onfocus="prevent()" onclick="try{excecute_request('PYTHON')}catch(e){alert(e)}">Run</button> -->
-                </div>
-                <div class="btn">
-                    <a class="btn" id="button_check" onclick="check_result()">Check</a>
+                <div class="due_btn" style="display: contents;">
+                    <div class="col-1 my-1" style="margin-left: auto;">
+                        <a class="btn" id="button_run" class="button_run" onclick="getOutput()">Run</a>
+                    </div>
+                    <div class="col-1 my-1">
+                        <a class="btn" id="button_check" onclick="check_result()">Check</a>
+                    </div>
                 </div>
             </div>
         </form>
@@ -65,8 +66,8 @@
         </div>
     </div>
         
-    <div class="container" id="container_3">
-        <div class="row">
+    <div class="container" id="container_3" style="margin: auto;">
+        <div class="row" style="margin: auto;">
             <a class="previous btn" onclick="get_problem(parseInt($('#iframeCode').attr('idd'))-1)">
                 <div class="col" id="previous_problem">
                     Previous problem
