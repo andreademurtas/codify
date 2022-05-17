@@ -4,18 +4,22 @@ const request = require('request');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
+const problem = require('./problem');
 const challenges_module = require('./challenges');
 const session = require('express-session');
 const crypto = require('crypto');
 try{require("dotenv").config();}catch(e){console.log(e);}
 const { exec } = require("child_process");
 const { networkInterfaces } = require('os');
+var cors = require('cors');
+
 
 const app = express(); // create an instance of an express app
 const nets = networkInterfaces();
 const results = Object.create(null);
 
 //middleware
+app.use(cors());
 app.use(body_parser.json()); // support json encoded bodies
 app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
@@ -317,6 +321,14 @@ app.get("/getChallenge", (req, res) => {
       res.status(500).json({success: false, message: "Internal server error"});
 	});
 });
+
+app.get('/getOutput', (req, res) => {
+  console.log("Richiesto output");
+  console.log("Codice: "+ req.query.code + "\nLinguaggio: " + req.query.language);  
+  problem.getResult(req.query.code, req.query.language).then((output) => {
+    res.send(output);
+  });
+})
 
 // #############################################################################
 // SECTION FOR REST API

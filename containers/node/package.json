@@ -19,6 +19,7 @@
     "express": "latest",
     "bcryptjs": "latest",
     "body-parser": "latest",
+    "cors": "latest",
     "dotenv": "latest",
     "request": "latest",
     "mongoose": "latest",

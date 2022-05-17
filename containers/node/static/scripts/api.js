@@ -1,4 +1,4 @@
-function excecute_request() {
+function excecute_request1() {
     // inizializzo le variabili per la richiesta all'api
     const CODE_EVALUATION_URL = 'https://api.hackerearth.com/v4/partner/code-evaluation/submissions/';
     const CLIENT_SECRET = '8af269c1c8a2c651ef3d530cd5721155e2319df1';
@@ -17,16 +17,9 @@ function excecute_request() {
         data: source,
         success: function(response){  
             result = JSON.stringify(response);
+            alert(result)
             const STATUS_UPDATE_URL = response.status_update_url;
             get_status(STATUS_UPDATE_URL);
-
-            // alert(JSON.stringify(response.result));
-            // if (response.result.request_status.code != 'REQUEST_COMPLITED') {
-            //     const STATUS_UPDATE_URL = response.status_update_url;
-            //     get_status(STATUS_UPDATE_URL);
-                
-            // }
-            
         }
     });   
 }
@@ -38,10 +31,13 @@ function get_status(link){
     $.ajax({
         type: 'POST',
         url: link,
-        headers:{"client-secret": CLIENT_SECRET, 'Access-Control-Allow-Origin': '*'},
+        headers:{"client-secret": CLIENT_SECRET, 'Access-Control-Allow-Origin': 'http://localhost'},
         success: function(response){
             if (response.request_status.code != "REQUEST_COMPLETED"){
-                get_status(link);
+                // get_status(link);
+                alert(JSON.stringify(response));
+                alert(response.request_status.code);
+                setTimeout(() => {  get_status(link); }, 5000);
                 return 0;
             }
             const OUTPUT_LINK = response.result.run_status.output;
@@ -59,5 +55,81 @@ function download_output(link){
             var x = document.getElementById("textarea_outputCode");
             x.value = response;
         }
+    });
+}
+
+function excecute_request1() {
+    // inizializzo le variabili per la richiesta all'api
+    var axios = require('axios');
+    var data = JSON.stringify({
+            "code":`public class program{
+                        public static void main(String [] args){
+                            System.out.println(5+5+6);
+                        }
+                        }`,
+            "language":"java",
+            "input":""
+            });
+
+    var config = {
+    method: 'post',
+    url: 'https://codexweb.netlify.app/.netlify/functions/enforceCode',
+    headers: { 
+        'Content-Type': 'application/json'
+    },
+    data : data
+    };
+
+    axios(config).then(function (response) {
+    console.log(response.data);
+    })
+    .catch(function (error) {
+    console.log("Errore: " +error);
+    });
+}
+
+function getOutput(){
+    var code =  $('#textareaCode').val(); 
+    var language = $('#language').val();
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText).output;
+            var x = document.getElementById("textarea_outputCode");
+            x.value = response;
+        }
+    };
+    var params = new URLSearchParams();
+    params.append('code', code);
+    params.append('language', language);
+    console.log(code);
+    xhttp.open("GET", '/getOutput?'+params.toString(), true);
+    xhttp.send();
+}
+
+function getResult1(){
+    var code =  $('#textareaCode').val(); 
+    var language = $('#language').val();
+    var data = JSON.stringify({
+        "code":code,
+        "language":language,
+        "input":""
+    });
+
+    var config = {
+    method: 'post',
+    url: 'https://codexweb.netlify.app/.netlify/functions/enforceCode',
+    headers: { 
+        'Content-Type': 'application/json'
+    },
+    data : data
+    };
+    
+    axios(config)
+    .then(function (response) {
+    console.log(response.data);
+    })
+    .catch(function (error) {
+    console.log(error);
     });
 }

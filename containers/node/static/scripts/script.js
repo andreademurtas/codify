@@ -31,13 +31,13 @@ function prevent(){
 function cambio_linguaggio(linguaggio){
     var x = document.getElementById("textareaCode");
     if (linguaggio == 'Python'){
-        x.value = "print(5 + 10)";
+        x.value = "print(\"Hello World\")";
     }
     else if (linguaggio == 'C'){
-        x.value = "int main(){\n\n}";
+        x.value = "#include <stdio.h>\nint main(){\n    printf(\"Hello World\");\n}";
     }
     else if (linguaggio == 'Java'){
-        x.value = "public int main(){\n\nreturn 0;\n}";
+        x.value = "public class program{\n    public static void main(String [] args){\n        System.out.println(\"Hello World\");\n    }\n}";
     }
     else{
         x.value = "Scegliere la lingua...";
