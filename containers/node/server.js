@@ -287,7 +287,7 @@ app.get("/profile", restrict, (req, res) => {
 });
 
 app.get("/userInfo", restrict, (req, res) => {
-  users_module.User.findOne({ username: req.session.user.email })
+  users_module.User.findOne({ username: req.session.user.username })
     .then( (user) => {
       if (!user) {
         res.status(404).send({success: false, error: 'User not found.'});
