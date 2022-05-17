@@ -17,10 +17,16 @@
                 <div class="col-4 my-1">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Language</label>
                     <select class="custom-select mr-sm-2" id="language">
-                        <option onclick= "cambio_linguaggio('')">Choose...</option>
-                        <option value="py" onclick= "cambio_linguaggio('Python')">Python</option>
-                        <option value="c" onclick= "cambio_linguaggio('C')">C</option>
-                        <option value="java" onclick= "cambio_linguaggio('Java')">Java</option>
+                        <option value=" ">Choose...</option>
+                        
+                        <option value="c">C</option>
+                        <option value="cpp">C++</option>
+                        <option value="cs">C#</option>
+                        <option value="java">Java</option>
+                        <option value="py">Python</option>
+                        <option value="rb">Ruby</option>
+                        <option value="kt">Kotlin</option>
+                        <option value="swift">Swift</option>
                     </select>
                 </div>
                 <div class="col-1 my-1">
@@ -85,6 +91,9 @@
             prevent();
             get_tab();
         });
+        document.getElementById("language").addEventListener("change", (event) => {
+            cambio_linguaggio($('#language').val());
+        })
     </script>
 </body>
 </html>

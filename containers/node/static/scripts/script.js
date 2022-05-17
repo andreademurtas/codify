@@ -10,9 +10,11 @@ function get_tab(){
             this.selectionStart=start+1;
             this.selectionEnd=start+1; 
         }
-        else if ("'\"(".includes(e.key)){
+        else if ("'\"([{".includes(e.key)){
             var key = e.key;
             if (key == '(') key = ')';
+            if (key == '[') key = ']';
+            if (key == '{') key = '}';
             var start = this.selectionStart;
             var end = this.selectionEnd;
             this.value = this.value.substring(0, start) + key + this.value.substring(end);
@@ -30,14 +32,29 @@ function prevent(){
 
 function cambio_linguaggio(linguaggio){
     var x = document.getElementById("textareaCode");
-    if (linguaggio == 'Python'){
-        x.value = "print(\"Hello World\")";
-    }
-    else if (linguaggio == 'C'){
+    if (linguaggio == 'c'){
         x.value = "#include <stdio.h>\nint main(){\n    printf(\"Hello World\");\n}";
     }
-    else if (linguaggio == 'Java'){
+    else if (linguaggio == 'cpp'){
+        x.value = "#include <iostream>\nint main(){\n\tstd::cout << \"Hello World!\";\n}";
+    }
+    else if (linguaggio == 'cs'){
+        x.value = "using System;\nclass GFG {\n\tstatic public void Main(String[] args){\n\t\tConsole.WriteLine(\"Main Method\");\n\t}\n}";
+    }
+    else if (linguaggio == 'java'){
         x.value = "public class program{\n    public static void main(String [] args){\n        System.out.println(\"Hello World\");\n    }\n}";
+    }
+    else if (linguaggio == 'py'){
+        x.value = "print(\"Hello World\")";
+    }
+    else if (linguaggio == 'rb'){
+        x.value = "puts \"Hello World\"";
+    }
+    else if (linguaggio == 'kt'){
+        x.value = "fun main(args : Array<String>) {\n\tprintln(\"Hello, World!\")\n}";
+    }
+    else if (linguaggio == 'swift'){
+        x.value = "print(\"Hello, World!\") ";
     }
     else{
         x.value = "Scegliere la lingua...";

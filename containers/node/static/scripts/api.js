@@ -1,3 +1,24 @@
+function getOutput(){
+    var body = {
+        "code":  $('#textareaCode').val(),
+        "language": $('#language').val()
+    };
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
+            var response = JSON.parse(this.responseText).output;
+            var x = document.getElementById("textarea_outputCode");
+            x.value = response;
+        }
+    };
+    xhttp.open("POST", '/getOutput', true);
+    xhttp.setRequestHeader('Content-Type', 'application/json;charset=UTF-8')
+    xhttp.send(JSON.stringify(body));
+}
+
+
+
 function excecute_request1() {
     // inizializzo le variabili per la richiesta all'api
     const CODE_EVALUATION_URL = 'https://api.hackerearth.com/v4/partner/code-evaluation/submissions/';
@@ -88,48 +109,29 @@ function excecute_request1() {
     });
 }
 
-function getOutput(){
-    var code =  $('#textareaCode').val(); 
-    var language = $('#language').val();
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(this.responseText).output;
-            var x = document.getElementById("textarea_outputCode");
-            x.value = response;
-        }
-    };
-    var params = new URLSearchParams();
-    params.append('code', code);
-    params.append('language', language);
-    console.log(code);
-    xhttp.open("GET", '/getOutput?'+params.toString(), true);
-    xhttp.send();
-}
 
-function getResult1(){
-    var code =  $('#textareaCode').val(); 
-    var language = $('#language').val();
-    var data = JSON.stringify({
-        "code":code,
-        "language":language,
-        "input":""
-    });
 
-    var config = {
-    method: 'post',
-    url: 'https://codexweb.netlify.app/.netlify/functions/enforceCode',
-    headers: { 
-        'Content-Type': 'application/json'
-    },
-    data : data
-    };
-    
-    axios(config)
-    .then(function (response) {
-    console.log(response.data);
-    })
-    .catch(function (error) {
-    console.log(error);
-    });
-}
+// function getResult1(){
+//     var code =  $('#textareaCode').val(); 
+//     var language = $('#language').val();
+//     var data = JSON.stringify({
+//         "code":code,
+//         "language":language,
+//         "input":""
+//     });
+//     var config = {
+//     method: 'post',
+//     url: 'https://codexweb.netlify.app/.netlify/functions/enforceCode',
+//     headers: { 
+//         'Content-Type': 'application/json'
+//     },
+//     data : data
+//     };
+//     axios(config)
+//     .then(function (response) {
+//     console.log(response.data);
+//     })
+//     .catch(function (error) {
+//     console.log(error);
+//     });
+// }

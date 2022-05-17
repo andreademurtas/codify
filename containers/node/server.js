@@ -322,10 +322,8 @@ app.get("/getChallenge", (req, res) => {
 	});
 });
 
-app.get('/getOutput', (req, res) => {
-  console.log("Richiesto output");
-  console.log("Codice: "+ req.query.code + "\nLinguaggio: " + req.query.language);  
-  problem.getResult(req.query.code, req.query.language).then((output) => {
+app.post('/getOutput', (req, res) => {
+  problem.getResult(req.body.code, req.body.language).then((output) => {
     res.send(output);
   });
 })
