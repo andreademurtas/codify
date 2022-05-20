@@ -15,9 +15,11 @@ services:
     networks:
       - app
       - db
-      - mail
+      - amqp
     environment:
       - HOST_REDIRECT
+    depends_on:
+      - rabbitmq
 
   mongodb:
     build: "./containers/mongo"
@@ -29,9 +31,17 @@ services:
     build: "./containers/nodemailer"
     container_name: "nodemailer"
     networks:
-      - mail
+      - amqp
+    depends_on:
+      - rabbitmq
+  
+  rabbitmq:
+    build: "./containers/rabbitmq"
+    container_name: "rabbitmq"
+    networks:
+      - amqp
 
 networks:
   app:
   db:
-  mail:
+  amqp:

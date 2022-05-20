@@ -16,6 +16,7 @@
     "codify"
   ],
   "dependencies": {
+    "amqplib": "latest",
     "express": "latest",
     "bcryptjs": "latest",
     "body-parser": "latest",

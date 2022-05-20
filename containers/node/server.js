@@ -4,22 +4,18 @@ const request = require('request');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
-const problem = require('./problem');
-const challenges_module = require('./challenges');
 const session = require('express-session');
 const crypto = require('crypto');
+const amqplib = require('amqplib/callback_api');
 try{require("dotenv").config();}catch(e){console.log(e);}
 const { exec } = require("child_process");
 const { networkInterfaces } = require('os');
-var cors = require('cors');
-
 
 const app = express(); // create an instance of an express app
 const nets = networkInterfaces();
 const results = Object.create(null);
 
 //middleware
-app.use(cors());
 app.use(body_parser.json()); // support json encoded bodies
 app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
@@ -130,6 +126,65 @@ app.post('/signup', (req, res) => {
 		req.session.success = 'Authenticates as' + user.username;
         res.redirect('/');
       });
+      //publisher
+		amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
+    			if (err) {
+        			console.error(err.stack);
+        			return process.exit(1);
+    			}
+
+    		// Create channel
+    		connection.createChannel((err, channel) => {
+        		if (err) {
+            			console.error(err.stack);
+            			return process.exit(1);
+        		}
+
+			//create queue
+			var queue = 'queue';
+	
+      			// Ensure queue for messages
+      			channel.assertQueue(queue, {
+            		// Ensure that the queue is not deleted when server restarts
+            		durable: true
+        		}, err => {
+            		if (err) {
+              			console.error(err.stack);
+              			return process.exit(1);
+      			}
+
+            		// Create a function to send objects to the queue
+            		// Javascript object is converted to JSON and then into a Buffer
+            		let sender = (content) => {
+                		let sent = channel.sendToQueue(queue, Buffer.from(JSON.stringify(content)), {
+                    		// Store queued elements on disk
+                    		persistent: true,
+                    		contentType: 'application/json'
+                		});
+            		};
+
+            		// push message to queue
+            		let sent = 0;
+            		let sendNext = () => {
+               	 	if (sent >= 1) {
+                    			console.log('All messages sent!');
+                    			// Close connection to AMQP server
+                    			// We need to call channel.close first, otherwise pending
+                    			// messages are not written to the queue
+                    			return channel.close(() => connection.close());
+                		}
+                		sent++;
+                		sender({
+                    			to: email,
+                    			subject: 'Test message #' + sent,
+                    			text: 'email:' + email + ' username:' + username
+                    		});
+                    		return channel.close(() => connection.close());
+            		};
+            		sendNext();
+        		});
+    		});
+	});
     });
   });
 });
@@ -287,7 +342,7 @@ app.get("/profile", restrict, (req, res) => {
 });
 
 app.get("/userInfo", restrict, (req, res) => {
-  users_module.User.findOne({ username: req.session.user.username })
+  users_module.User.findOne({ username: req.session.user.email })
     .then( (user) => {
       if (!user) {
         res.status(404).send({success: false, error: 'User not found.'});
@@ -300,33 +355,6 @@ app.get("/userInfo", restrict, (req, res) => {
 	  res.status(500).json({success: false, message: "Internal server error"});
 	});
 });
-
-app.get("/getChallenges", (req, res) => {
-  challenges_module.Challenge.find({})
-    .then( (challenges) => {
-      res.status(200).send({success: true, challenges: challenges});
-	}) //
-    .catch( (err) => {
-      res.status(500).json({success: false, message: "Internal server error"});
-	});
-});
-
-app.get("/getChallenge", (req, res) => {
-  var id = req.query.id;
-  challenges_module.Challenge.findOne({'title': 'Challenge '+id.toString()})
-    .then( (challenge) => {
-      res.status(200).send(challenge);
-	}) //
-    .catch( (err) => {
-      res.status(500).json({success: false, message: "Internal server error"});
-	});
-});
-
-app.post('/getOutput', (req, res) => {
-  problem.getResult(req.body.code, req.body.language).then((output) => {
-    res.send(output);
-  });
-})
 
 // #############################################################################
 // SECTION FOR REST API
