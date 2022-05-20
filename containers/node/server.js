@@ -4,18 +4,22 @@ const request = require('request');
 const body_parser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const users_module = require('./user');
+const problem = require('./problem');
+const challenges_module = require('./challenges');
 const session = require('express-session');
 const crypto = require('crypto');
 const amqplib = require('amqplib/callback_api');
 try{require("dotenv").config();}catch(e){console.log(e);}
 const { exec } = require("child_process");
 const { networkInterfaces } = require('os');
+const cors = require('cors');
 
 const app = express(); // create an instance of an express app
 const nets = networkInterfaces();
 const results = Object.create(null);
 
 //middleware
+app.use(cors());
 app.use(body_parser.json()); // support json encoded bodies
 app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
 app.use(session({
@@ -342,7 +346,7 @@ app.get("/profile", restrict, (req, res) => {
 });
 
 app.get("/userInfo", restrict, (req, res) => {
-  users_module.User.findOne({ username: req.session.user.email })
+  users_module.User.findOne({ username: req.session.user.username })
     .then( (user) => {
       if (!user) {
         res.status(404).send({success: false, error: 'User not found.'});
@@ -355,6 +359,33 @@ app.get("/userInfo", restrict, (req, res) => {
 	  res.status(500).json({success: false, message: "Internal server error"});
 	});
 });
+
+app.get("/getChallenges", (req, res) => {
+  challenges_module.Challenge.find({})
+    .then( (challenges) => {
+      res.status(200).send({success: true, challenges: challenges});
+	}) //
+    .catch( (err) => {
+      res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
+app.get("/getChallenge", (req, res) => {
+  var id = req.query.id;
+  challenges_module.Challenge.findOne({'title': 'Challenge '+id.toString()})
+    .then( (challenge) => {
+      res.status(200).send(challenge);
+	}) //
+    .catch( (err) => {
+      res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
+app.post('/getOutput', (req, res) => {
+  problem.getResult(req.body.code, req.body.language).then((output) => {
+    res.send(output);
+  });
+})
 
 // #############################################################################
 // SECTION FOR REST API
