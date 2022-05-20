@@ -8,7 +8,8 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "nodemailer": "latest"
+    "nodemailer": "latest",
+    "amqplib": "latest"
   },
   "keywords": [],
   "author": "",
