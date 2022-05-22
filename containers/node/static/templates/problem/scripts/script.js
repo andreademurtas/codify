@@ -82,7 +82,7 @@ function get_problem(){
             else{
                 $(".previous").attr("style", "display:block;");
             }
-            if (id == 3){
+            if (id == 5){
                 $(".next").attr("style", "display:none;");
             }
             else{
