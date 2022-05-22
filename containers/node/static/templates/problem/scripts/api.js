@@ -1,7 +1,8 @@
 function getOutput(){
     var body = {
         "code":  $('#textareaCode').val(),
-        "language": $('#language').val()
+        "language": $('#language').val().split("/")[0],
+        "version": $('#language').val().split("/")[1]
     };
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {

@@ -32,22 +32,25 @@ function prevent(){
 
 function cambio_linguaggio(linguaggio){
     var x = document.getElementById("textareaCode");
-    if (linguaggio == 'c'){
+    if (linguaggio == ""){
+        x.value = "Scegliere la lingua...";
+    }
+    else if (linguaggio == 'c'){
         x.value = "#include <stdio.h>\nint main(){\n    printf(\"Hello World\");\n}";
     }
     else if (linguaggio == 'cpp'){
         x.value = "#include <iostream>\nint main(){\n\tstd::cout << \"Hello World!\";\n}";
     }
-    else if (linguaggio == 'cs'){
+    else if (linguaggio == 'csharp'){
         x.value = "using System;\nclass GFG {\n\tstatic public void Main(String[] args){\n\t\tConsole.WriteLine(\"Main Method\");\n\t}\n}";
     }
     else if (linguaggio == 'java'){
         x.value = "public class program{\n    public static void main(String [] args){\n        System.out.println(\"Hello World\");\n    }\n}";
     }
-    else if (linguaggio == 'py'){
+    else if (linguaggio == 'python3'){
         x.value = "print(\"Hello World\")";
     }
-    else if (linguaggio == 'rb'){
+    else if (linguaggio == 'ruby'){
         x.value = "puts \"Hello World\"";
     }
     else if (linguaggio == 'kt'){
@@ -57,16 +60,18 @@ function cambio_linguaggio(linguaggio){
         x.value = "print(\"Hello, World!\") ";
     }
     else{
-        x.value = "Scegliere la lingua...";
+        x.value = "";
     }
 }
 
 
 
-function get_problem(id=1){
+function get_problem(){
+    var id = parseInt(window.location.search.split("=")[1]);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
+            console.log(this.responseText);
             var res = JSON.parse(this.responseText);
             // console.log(res.description)
             $("#iframeCode")[0].value = res.description;

@@ -17,16 +17,19 @@
                 <div class="col-4 my-1">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Language</label>
                     <select class="custom-select mr-sm-2" id="language">
-                        <option value=" ">Choose...</option>
+                        <option value="/">Choose...</option>
                         
-                        <option value="c">C</option>
-                        <option value="cpp">C++</option>
-                        <option value="cs">C#</option>
-                        <option value="java">Java</option>
-                        <option value="py">Python</option>
-                        <option value="rb">Ruby</option>
-                        <option value="kt">Kotlin</option>
-                        <option value="swift">Swift</option>
+                        <option value="bash/4">Bash Shell</option>
+                        <option value="c/5">C</option>
+                        <option value="cpp/5">C++</option>
+                        <option value="csharp/4">C#</option>
+                        <option value="java/4">Java</option>
+                        <option value="nodejs/4">NodeJS</option>
+                        <option value="php/4">PHP</option>
+                        <option value="python3/4">Python</option>
+                        <option value="ruby/4">Ruby</option>
+                        <option value="kotlin/3">Kotlin</option>
+                        <option value="swift/4">Swift</option>
                     </select>
                 </div>
                 <div class="due_btn" style="display: contents;">
@@ -68,12 +71,12 @@
         
     <div class="container" id="container_3" style="margin: auto;">
         <div class="row" style="margin: auto;">
-            <a class="previous btn" onclick="get_problem(parseInt($('#iframeCode').attr('idd'))-1)">
+            <a class="previous btn" onclick="change_prob(-1)">
                 <div class="col" id="previous_problem">
                     Previous problem
                 </div>
             </a>
-            <a class="next btn" onclick="get_problem(parseInt($('#iframeCode').attr('idd'))+1)">
+            <a class="next btn" onclick="change_prob(1)">
                 <div class="col" id="next_problem">
                     Next problem
                 </div>
@@ -82,8 +85,8 @@
     </div>
     
     <script type="application/javascript" src="js/bootstrap.min.js"></script>
-    <script type="application/javascript" src="scripts/script.js" ></script>
-    <script type="application/javascript" src="scripts/api.js" ></script>
+    <script type="application/javascript" src="templates/problem/scripts/script.js" ></script>
+    <script type="application/javascript" src="templates/problem/scripts/api.js" ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
@@ -93,8 +96,17 @@
             get_tab();
         });
         document.getElementById("language").addEventListener("change", (event) => {
-            cambio_linguaggio($('#language').val());
+            cambio_linguaggio($('#language').val().split('/')[0]);
         })
+    </script>
+    <script>
+        function change_prob(diff){
+            var url = window.location.href.slice(0,-1);
+            var dif = parseInt(window.location.search.split("=")[1]) + diff;
+            dif = dif.toString();
+            url = url+dif;
+            window.location.href=url;
+        }
     </script>
 </body>
 </html>

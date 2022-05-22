@@ -338,8 +338,13 @@ app.get('/logout', function(req, res){
 });
 
 app.get('/challenges', (req, res) => {
+  res.sendFile(path.join(__dirname, '/static/templates/problems/problems.html'))
+});
+
+app.get('/challenge', (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
 });
+
 
 app.get("/profile", restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/profilo/profilo.html'));
@@ -382,7 +387,7 @@ app.get("/getChallenge", (req, res) => {
 });
 
 app.post('/getOutput', (req, res) => {
-  problem.getResult(req.body.code, req.body.language).then((output) => {
+  problem.getResult(req.body.code, req.body.language, req.body.version).then((output) => {
     res.send(output);
   });
 })
