@@ -96,6 +96,7 @@ app.get('/signup', (req, res) => {
 
 // signup post request
 app.post('/signup', (req, res) => {
+  var email = req.body.email;
   if (!req.body.username || !req.body.email || !req.body.password) {
     res.json({success: false, message: 'Please enter username, email and password.'});
     res.redirect('/signup');
@@ -128,7 +129,7 @@ app.post('/signup', (req, res) => {
 	  req.session.regenerate(function(err) {
 	    req.session.user = user;
 		req.session.success = 'Authenticates as' + user.username;
-        res.redirect('/');
+        res.redirect('/challenges');
       });
       //publisher
 		amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
