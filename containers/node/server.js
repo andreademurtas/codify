@@ -135,14 +135,14 @@ app.post('/signup', (req, res) => {
 		amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
     			if (err) {
         			console.error(err.stack);
-        			return process.exit(1);
+        			//return process.exit(1);
     			}
 
     		// Create channel
     		connection.createChannel((err, channel) => {
         		if (err) {
             			console.error(err.stack);
-            			return process.exit(1);
+            			//return process.exit(1);
         		}
 
 			//create queue
@@ -155,7 +155,7 @@ app.post('/signup', (req, res) => {
         		}, err => {
             		if (err) {
               			console.error(err.stack);
-              			return process.exit(1);
+              			//return process.exit(1);
       			}
 
             		// Create a function to send objects to the queue
