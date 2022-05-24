@@ -97,6 +97,7 @@ app.get('/signup', (req, res) => {
 // signup post request
 app.post('/signup', (req, res) => {
   var email = req.body.email;
+  var username = req.body.username;
   if (!req.body.username || !req.body.email || !req.body.password) {
     res.json({success: false, message: 'Please enter username, email and password.'});
     res.redirect('/signup');
@@ -124,7 +125,8 @@ app.post('/signup', (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 10),
-    score: 0
+    score: 0,
+    challenges: []
   }).then( (user) => {
 	  req.session.regenerate(function(err) {
 	    req.session.user = user;
@@ -209,25 +211,25 @@ app.post('/login', (req, res, next) => {
   authenticate(req.body.username, req.body.password, (err, user) => {
     if (err) {
       return next(err);
-	}
+	  }
     if (user) {
-	  req.session.regenerate(function(err) {
+	    req.session.regenerate(function(err) {
 	    req.session.user = user;
-		req.session.success = 'Authenticates as' + user.username;
-        res.redirect('/challenges');
-	  });
-	}
+		  req.session.success = 'Authenticates as' + user.username;
+      res.redirect('/challenges');
+      });
+    }
     else {
-      req.session.error = 'Authentication failed, please check your '
-      + ' username and password.';
+      req.session.error = 'Authentication failed, please check your ' + ' username and password.';
       res.redirect('/login');
-	}
+	  }
   });
 });
 
 var host = "";
 app.get('/login-google', (req, res) => {
-      host = process.env.HOST_REDIRECT;
+  host = process.env.HOST_REDIRECT;
+  if (!host)  host = 'http://localhost';
   //res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
   res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=" + host + "/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
@@ -313,7 +315,8 @@ app.get('/registration-google', (req, res) => {
 	      username: utente.email,
 	      email: utente.email,
 	      password: g_token,
-	      score: 0
+	      score: 0,
+        challenges: []
 	    }).then( (user) => {
 	      req.session.regenerate(function(err) {
 	          req.session.user = user;
@@ -351,6 +354,29 @@ app.get("/profile", restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/profilo/profilo.html'));
 });
 
+
+app.get("/addChallenge", restrict, (req, res) => {
+  users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$push: {challenges: req.query.id}})
+	.catch( (err) => {
+	  res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
+app.get("getChallengesUser", restrict, (req, res) => {
+  users_module.User.findOne({ username: req.session.user.username })
+    .then( (user) => {
+      if (!user) {
+        res.status(404).send({success: false, error: 'User not found.'});
+      }
+      else {
+			res.status(200).send({success: true, challenges: user.challenges});
+      }
+	})
+	.catch( (err) => {
+	  res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
 app.get("/userInfo", restrict, (req, res) => {
   users_module.User.findOne({ username: req.session.user.username })
     .then( (user) => {
@@ -358,11 +384,21 @@ app.get("/userInfo", restrict, (req, res) => {
         res.status(404).send({success: false, error: 'User not found.'});
       }
       else {
-			res.status(200).send({success: true, username: user.username, email: user.email, score: user.score});
+			res.status(200).send({success: true, id: user.id, username: user.username, email: user.email, score: user.score, challenges: user.challenges});
       }
 	})
 	.catch( (err) => {
 	  res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
+app.get("/getUsers", (req, res) => {
+  users_module.User.find({})
+    .then( (users) => {
+      res.status(200).send({success: true, users: users});
+	}) 
+    .catch( (err) => {
+      res.status(500).json({success: false, message: "Internal server error"});
 	});
 });
 

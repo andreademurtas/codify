@@ -16,6 +16,7 @@
 		            data = await response.json();
 				    document.getElementById("score").innerText = data.score;
 				    document.getElementById("username").innerText = data.username;
+				    document.getElementById("email").innerText = data.email;
 				});
 		</script>
 
@@ -28,6 +29,7 @@
         <div class="text-center"> 
 		<img src="templates/profilo/profilo.jpg" width="100" class="rounded-circle">
             <h3 class="mt-2" id="username"></h3>
+            <h3 class="mt-2" id="email"></h3>
 			<span class="mt-1 clearfix"></span>
 			
 			<div class="row mt-3 mb-3 justify-content-center">
@@ -41,7 +43,7 @@
 			
 			<hr class="line">
 			
-		    <a href="/logout" class="profile_button px-5">Logout</a> 
+		    <a href="/logout" class="profile_button px-5">Logout</a>
         </div>
     </div>
 </div>

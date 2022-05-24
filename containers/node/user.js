@@ -36,6 +36,11 @@ const User = new Schema({
 			type: Number,
 		    default: 0,
 		    required: true,
+		},
+		challenges: {
+			type: Array,
+			default: [],
+			required: true,
 		}
 	}, {collection: 'users'});
 

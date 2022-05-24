@@ -101,6 +101,7 @@ function check_result(){
         if (this.readyState == 4 && this.status == 200) {
             var res = JSON.parse(this.responseText);
             if ($("#textarea_outputCode")[0].value.trim() == res.answer){
+                aggiungiChallenge(id);
                 alert("Risultato esatto");
                 // invia al server che l'utente ha risolto la challenge
             } else{
@@ -110,4 +111,9 @@ function check_result(){
     };
     xhttp.open("GET", '/getChallenge?id='+id.toString(), true);
     xhttp.send();
+}
+
+async function aggiungiChallenge(id){
+    const response = await fetch("/addChallenge?id="+id);
+    data = await response.json();
 }
