@@ -3,6 +3,11 @@ const Schema = mongoose.Schema;
 
 
 const Challenge = new Schema({
+	id: {
+		type: String,
+		required: true,
+		unique: true
+	},
     title: {
         type: String,
 	  	required: true,

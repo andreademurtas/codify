@@ -156,7 +156,7 @@ app.post('/signup', (req, res) => {
             		if (err) {
               			console.error(err.stack);
               			//return process.exit(1);
-      			}
+      				}
 
             		// Create a function to send objects to the queue
             		// Javascript object is converted to JSON and then into a Buffer
@@ -214,7 +214,7 @@ app.post('/login', (req, res, next) => {
 	  req.session.regenerate(function(err) {
 	    req.session.user = user;
 		req.session.success = 'Authenticates as' + user.username;
-        res.redirect('/');
+        res.redirect('/challenges');
 	  });
 	}
     else {
