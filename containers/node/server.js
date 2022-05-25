@@ -130,7 +130,7 @@ app.post('/signup', (req, res) => {
   }).then( (user) => {
 	  req.session.regenerate(function(err) {
 	    req.session.user = user;
-		req.session.success = 'Authenticates as' + user.username;
+		req.session.success = 'Authenticated as' + user.username;
         res.redirect('/challenges');
       });
       //publisher
@@ -342,7 +342,7 @@ app.get('/logout', function(req, res){
   });
 });
 
-app.get('/challenges', (req, res) => {
+app.get('/challenges', restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problems/problems.html'))
 });
 
@@ -470,7 +470,7 @@ app.get("/api/users/:user", (req, res) => {
 
 
 /**
- * @api {post} /api/users/create Request User information
+ * @api {post} /api/users/create Create User
  * @apiName CreateUser
  * @apiGroup User
  *
