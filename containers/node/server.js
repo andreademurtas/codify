@@ -470,7 +470,7 @@ app.get("/api/users/:user", (req, res) => {
 
 
 /**
- * @api {post} /api/users/create Create User
+ * @api {post} /api/users/create Create a new User 
  * @apiName CreateUser
  * @apiGroup User
  *

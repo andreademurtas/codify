@@ -25,6 +25,13 @@ const Challenge = new Schema({
 	  	required: true,
    	  	trim: true,
    	  	minlength: 1,
+	},
+	score: {
+		type: Number,
+		required: true,
+		default: 0,
+		min: 0,
+		max: 1000
 	}
     }, {collection: 'challenges'});
 
