@@ -1,18 +1,16 @@
 .grid-container {
     display: grid;
     grid-template-columns: auto auto auto;
-    background-color: #2196F3;
     padding: 10px;
-    height: 70vh;
-    width: 90vw;
 }
 
 .grid-item {
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(0, 0, 0, 0.8);
     padding: 20px;
     font-size: 30px;
     text-align: center;
+    border-radius: 10px;
+    margin: 30px;
 }
 
 a{
@@ -22,4 +20,8 @@ a{
 
 ul{
     display: flex;
+}
+
+.grid-item:hover{
+    background: #e7c4b7;
 }

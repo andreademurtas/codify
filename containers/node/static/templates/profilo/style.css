@@ -18,15 +18,23 @@ body {
 }
 
 .card {
-	color:#fff;
+	color:black;
     width: 350px;
     border-radius: 10px;
-   background: linear-gradient(145deg, grey, white);
+    background: lightgray;
+   /* background: linear-gradient(145deg, grey, white);
 box-shadow:  20px 20px 60px grey, 
-             -20px -20px 60px white;
-    border: none
+             -20px -20px 60px white; */
+    border: solid 2px black;
+    height: fit-content;
+    min-height: 370px;
+    width: fit-content;
+    min-width: 350px;
 }
 
+.num{
+    color: black !important;
+}
 .neo-button {
     width: 40px;
     height: 40px;
@@ -85,8 +93,8 @@ box-shadow:  28px 28px 57px white,
    outline:0 !important;
 border-radius: 50px;
 background: black;
-box-shadow:  28px 28px 57px black, 
-             -28px -28px 57px grey;
+/* box-shadow:  28px 28px 57px black, 
+             -28px -28px 57px grey; */
 	
 }
 

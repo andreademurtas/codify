@@ -61,3 +61,8 @@ textarea[id="textarea_outputcontainer"]{
     padding: 5px;
     border-radius: 8px;
 }
+.score{
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 2px;
+}

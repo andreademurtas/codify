@@ -28,7 +28,7 @@
         </div>
     </nav>
     <title>Codify</title>
-    <div class="container" id="parte_superiore" style="width: 100%;"><h1>Codify</h1><h5 class="challenge_risolta">Challenge risolta</h5></div>
+    <div class="container" id="parte_superiore" style="width: 100%;"><h5 class="challenge_risolta">Challenge risolta</h5></div>
     <div class="container" id="parte_bottoni">
         <!-- <h1>Parte bottoni</h1> -->
         <form>
@@ -67,6 +67,7 @@
             <div class="col" id="iframecontainer">
                 <div id="iframe">
                     <label class="mr-sm-2" for="inlineFormCustomSelect">Problema</label>
+                    <label class="Score"></label>
                     <textarea id="iframeCode" idd="" title="problema" autocorrect="off" autocapitalize="off" spellcheck="false" readonly="true"></textarea>
                 </div>
             </div>
@@ -113,6 +114,7 @@
             get_problem();
             prevent();
             get_tab();
+            challenge_risolta();
         });
         document.getElementById("language").addEventListener("change", (event) => {
             cambio_linguaggio($('#language').val().split('/')[0]);

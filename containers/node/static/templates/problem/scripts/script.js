@@ -75,7 +75,9 @@ function get_problem(){
             var res = JSON.parse(this.responseText);
             // console.log(res.description)
             $("#iframeCode")[0].value = res.description;
-            $("#iframeCode").attr("idd", id.toString());
+            $("#iframeCode").attr("id_challenge", id.toString());
+            $("#iframeCode").attr("score", res.score);
+            $('.Score')[0].innerHTML = res.score.toString() + " punti";
             challenge_risolta();
             if (id == 1){
                 $(".previous").attr("style", "display:none;");
@@ -83,7 +85,7 @@ function get_problem(){
             else{
                 $(".previous").attr("style", "display:block;");
             }
-            if (id == 5){
+            if (id == 8){
                 $(".next").attr("style", "display:none;");
             }
             else{
@@ -96,7 +98,7 @@ function get_problem(){
 }
 
 function check_result(){
-    var id = $("#iframeCode").attr("idd");
+    var id = $("#iframeCode").attr("id_challenge");
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -116,18 +118,19 @@ function check_result(){
 }
 
 async function aggiungiChallenge(id){
-    const response = await fetch("/addChallenge?id="+id);
+    const response = await fetch("/addChallenge?id="+id+"&score="+$("#iframeCode").attr("score"));
     data = await response.json();
 }
 
 async function challenge_risolta(){
-    var id = $("#iframeCode").attr("idd");
+    var id = $("#iframeCode").attr("id_challenge");
     const response = await fetch("/userInfo");
     data = await response.json();
     data = data.challenges;
     var risolta = false;
-    for (id_challenge in data){
+    for (id_challenge of data){
         if (id_challenge == id){
+            console.log(id_challenge);
             risolta = true;
             break;
         }

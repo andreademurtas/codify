@@ -7,7 +7,7 @@ function getProblems(){
                 var response = chall.title;
                 var id = chall.id;
                 console.log(chall); 
-                $(".grid-container").append("<div class=\"grid-item\" id=\""+id+"\"><a href=\"/challenge?id="+id+"\">"+response+"</a></div>");
+                $(".grid-container").append("<a class=\"grid-item\" id=\""+id+"\" href=\"/challenge?id="+id+"\" style=\"color: black; text-decoration: none; \" >"+response+"<br>"+chall.score+"</a>");
             }
         }
     };

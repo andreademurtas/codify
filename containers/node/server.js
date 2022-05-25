@@ -128,12 +128,12 @@ app.post('/signup', (req, res) => {
     score: 0,
     challenges: []
   }).then( (user) => {
-	  req.session.regenerate(function(err) {
-	    req.session.user = user;
-		req.session.success = 'Authenticated as' + user.username;
-        res.redirect('/challenges');
-      });
-      //publisher
+      req.session.regenerate(function(err) {
+      req.session.user = user;
+      req.session.success = 'Authenticated as' + user.username;
+      res.redirect('/challenges');
+    });
+    //publisher
 		amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
     			if (err) {
         			console.error(err.stack);
@@ -357,7 +357,7 @@ app.get("/profile", restrict, (req, res) => {
 
 
 app.get("/addChallenge", restrict, (req, res) => {
-  users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$push: {challenges: req.query.id}, $inc: {score: 100}})
+  users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$push: {challenges: req.query.id}, $inc: {score: parseInt(req.query.score)}})
 	.catch( (err) => {
 	  res.status(500).json({success: false, message: err});
 	});
