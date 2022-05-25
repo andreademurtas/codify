@@ -76,6 +76,7 @@ function get_problem(){
             // console.log(res.description)
             $("#iframeCode")[0].value = res.description;
             $("#iframeCode").attr("idd", id.toString());
+            challenge_risolta();
             if (id == 1){
                 $(".previous").attr("style", "display:none;");
             }
@@ -102,7 +103,8 @@ function check_result(){
             var res = JSON.parse(this.responseText);
             if ($("#textarea_outputCode")[0].value.trim() == res.answer){
                 aggiungiChallenge(id);
-                alert("Risultato esatto");
+                $('.challenge_risolta').attr("style", "display: block;")
+
                 // invia al server che l'utente ha risolto la challenge
             } else{
                 alert("Risultato sbagliato");
@@ -116,4 +118,22 @@ function check_result(){
 async function aggiungiChallenge(id){
     const response = await fetch("/addChallenge?id="+id);
     data = await response.json();
+}
+
+async function challenge_risolta(){
+    var id = $("#iframeCode").attr("idd");
+    const response = await fetch("/userInfo");
+    data = await response.json();
+    data = data.challenges;
+    var risolta = false;
+    for (id_challenge in data){
+        if (id_challenge == id){
+            risolta = true;
+            break;
+        }
+    }
+    if (risolta)
+        $('.challenge_risolta').attr("style", "display: block;")
+    else
+        $('.challenge_risolta').attr("style", "display: none;")
 }

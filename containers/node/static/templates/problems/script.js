@@ -15,3 +15,11 @@ function getProblems(){
     xhttp.send();
 }
 
+async function getDoneProblems(){
+    const response = await fetch("/userInfo");
+    var data = await response.json();
+    data = data.challenges;
+    for (id of data){
+        $('#'+id).attr("style", "background-color: lightgreen;")
+    }
+}

@@ -54,3 +54,10 @@ textarea{
 textarea[id="textarea_outputcontainer"]{
     padding: 0px;
 }
+
+.challenge_risolta{
+    display: none;
+    background-color: lightgreen;
+    padding: 5px;
+    border-radius: 8px;
+}

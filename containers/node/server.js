@@ -305,9 +305,10 @@ app.get('/registration-google', (req, res) => {
 	  }
       if (exists) {
         req.session.regenerate(function(err) {
-          req.session.user = utente;
-		  req.session.success = 'Authenticates as' + utente.email;
-          res.redirect("/challenges");
+        console.log(exists);
+        req.session.user = {username: utente.email, email: utente.email};
+        req.session.success = 'Authenticates as' + utente.email;
+        res.redirect("/challenges");
 		});
 	  }
       else {
@@ -356,41 +357,13 @@ app.get("/profile", restrict, (req, res) => {
 
 
 app.get("/addChallenge", restrict, (req, res) => {
-  users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$push: {challenges: req.query.id}})
+  users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$push: {challenges: req.query.id}, $inc: {score: 100}})
 	.catch( (err) => {
-	  res.status(500).json({success: false, message: "Internal server error"});
+	  res.status(500).json({success: false, message: err});
 	});
 });
 
-app.get("getChallengesUser", restrict, (req, res) => {
-  users_module.User.findOne({ username: req.session.user.username })
-    .then( (user) => {
-      if (!user) {
-        res.status(404).send({success: false, error: 'User not found.'});
-      }
-      else {
-			res.status(200).send({success: true, challenges: user.challenges});
-      }
-	})
-	.catch( (err) => {
-	  res.status(500).json({success: false, message: "Internal server error"});
-	});
-});
 
-app.get("/userInfo", restrict, (req, res) => {
-  users_module.User.findOne({ username: req.session.user.username })
-    .then( (user) => {
-      if (!user) {
-        res.status(404).send({success: false, error: 'User not found.'});
-      }
-      else {
-			res.status(200).send({success: true, id: user.id, username: user.username, email: user.email, score: user.score, challenges: user.challenges});
-      }
-	})
-	.catch( (err) => {
-	  res.status(500).json({success: false, message: "Internal server error"});
-	});
-});
 
 app.get("/getUsers", (req, res) => {
   users_module.User.find({})
@@ -409,6 +382,22 @@ app.get("/getChallenges", (req, res) => {
 	}) //
     .catch( (err) => {
       res.status(500).json({success: false, message: "Internal server error"});
+	});
+});
+
+
+app.get("/userInfo", restrict, (req, res) => {
+  users_module.User.findOne({ username: req.session.user.username })
+    .then( (user) => {
+      if (!user) {
+        res.status(404).send({success: false, error: 'User not found.' + user});
+      }
+      else {
+			res.status(200).send({success: true, id: user.id, username: user.username, email: user.email, score: user.score, challenges: user.challenges});
+      }
+	})
+	.catch( (err) => {
+	  res.status(500).json({success: false, message: "Internal server error"});
 	});
 });
 
