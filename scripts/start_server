@@ -2,7 +2,8 @@
 cd /home/ubuntu/app
 npm install
 docker-compose down
-docker system prune -a -f
+docker rm -f $(docker ps -a -q)
+docker volume rm $(docker volume ls -q)
 chmod +x scripts/docker_pipeline.sh
 chmod +x scripts/hostname.sh
 scripts/docker_pipeline.sh

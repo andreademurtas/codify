@@ -5,7 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="templates/problem/style.css">
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+    $(document).ready(function(){
+	  var req = new XMLHttpRequest();
+	  req.open('GET', 'http://localhost:3000/isLoggedIn', true);
+	  req.onreadystatechange = function() {
+	      if (this.status == 200 && this.readyState == 4) {
+			var response = JSON.parse(this.responseText);
+			const logout = document.getElementById('logout');
+			if(response.success == true){
+			  logout.style.display = "block";
+			}
+			else{
+		      logout.style.display = "none";
+		    }
+	      }
+	    };
+	  req.send();
+    });
+    </script>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light" style="border: solid 2px black;border-radius: 10px;">
@@ -21,7 +40,7 @@
             <li class="nav-item">
                 <a class="nav-link" href="/profile">Profilo</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="logout">
                 <a class="nav-link" href="/logout">Logout</a>
             </li>
             </ul>

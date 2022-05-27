@@ -12,6 +12,22 @@
     $(document).ready(function(){
       const form = document.getElementById('login-form');
       form.addEventListener('submit', handleFormSubmit);
+
+	  var req = new XMLHttpRequest();
+	  req.open('GET', 'http://localhost:3000/isLoggedIn', true);
+	  req.onreadystatechange = function() {
+	    if (this.status == 200 && this.readyState == 4) {
+			var response = JSON.parse(this.responseText);
+			const logout = document.getElementById('logout');
+			if(response.success == true){
+				logout.style.display = "block";
+			}
+			else{
+				logout.style.display = "none";
+			}
+	    }
+	  };
+	  req.send();
     });
     </script>
 	<link rel="stylesheet" type="text/css" href="templates/login/styles.css" >
@@ -30,7 +46,7 @@
             <li class="nav-item active">
                 <a class="nav-link" href="/profile">Profilo</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item" id="logout">
                 <a class="nav-link" href="/logout">Logout</a>
             </li>
             </ul>
