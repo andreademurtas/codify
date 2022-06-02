@@ -558,6 +558,15 @@ app.get("/getChallenge", (req, res) => {
 	});
 });
 
+app.get("/isLoggedIn", (req, res) => {
+    if (req.session.user) {
+	  res.status(200).send({success: true, user: req.session.user});
+	}
+	else {
+	  res.status(200).send({success: false, user: null});
+	}
+});
+
 app.post('/getOutput', (req, res) => {
   problem.getResult(req.body.code, req.body.language, req.body.version).then((output) => {
     res.send(output);
