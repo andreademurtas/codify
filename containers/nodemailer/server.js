@@ -5,9 +5,13 @@ const amqplib = require('amqplib/callback_api');
 const nodemailer = require('nodemailer');
 
 // Setup Nodemailer transport
-const transport = nodemailer.createTransport(
-	'smtps://codify045%40gmail.com:Codify123@smtp.gmail.com/?pool=true'
-);
+const transport = nodemailer.createTransport({
+	service: 'Gmail',
+	auth: {
+	    user: 'codify045@gmail.com',
+	    pass: 'sbbt ijlo gaqo ouwu'
+	}
+});
 
 transport.verify((error, success) => {
 	if (error) {
@@ -57,10 +61,14 @@ amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
 
                 // Decode message contents
                 let message = JSON.parse(data.content.toString());
+                console.log("ciao" + message);
                 
                 //prendo email e password
                 let email = message.email;
                 let username = message.username;
+                
+                console.log(message.email);
+                console.log(message.username);
                 
                 var mailOptions = {
                 	from: 'codify045@gmail.com',

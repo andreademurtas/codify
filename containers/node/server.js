@@ -134,11 +134,11 @@ app.post('/signup', (req, res) => {
       res.redirect('/challenges');
     });
     //publisher
-		amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
-    			if (err) {
-        			console.error(err.stack);
-        			//return process.exit(1);
-    			}
+	amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
+    		if (err) {
+        		console.error(err.stack);
+      			//return process.exit(1);
+    		}
 
     		// Create channel
     		connection.createChannel((err, channel) => {
@@ -182,8 +182,6 @@ app.post('/signup', (req, res) => {
                 		}
                 		sent++;
                 		sender({
-                    			to: email,
-                    			subject: 'Test message #' + sent,
                     			text: 'email:' + email + ' username:' + username
                     		});
                     		return channel.close(() => connection.close());
