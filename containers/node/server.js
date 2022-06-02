@@ -125,6 +125,8 @@ app.post('/signup', (req, res) => {
     username: req.body.username,
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 10),
+    g_token: "",
+    calendar_id: "",
     score: 0,
     challenges: []
   }).then( (user) => {
@@ -231,7 +233,7 @@ app.get('/login-google', (req, res) => {
   host = process.env.HOST_REDIRECT;
   if (!host)  host = 'http://localhost';
   //res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=https://www.codify.rocks/googlecallback&client_id="+process.env.G_CLIENT_ID);
-  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=" + host + "/googlecallback&client_id="+process.env.G_CLIENT_ID);
+  res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=" + host + "/googlecallback&client_id="+process.env.G_CLIENT_ID);
 }); 
 app.get('/googlecallback', (req, res) => {
   if (req.query.code!=undefined){  
@@ -306,7 +308,7 @@ app.get('/registration-google', (req, res) => {
       if (exists) {
         req.session.regenerate(function(err) {
         console.log(exists);
-        req.session.user = {username: utente.email, email: utente.email};
+        req.session.user = {username: utente.email, email: utente.email, g_token: g_token, calendar_id: "", score: 0, challenges: []};
         req.session.success = 'Authenticates as' + utente.email;
         res.redirect("/challenges");
 		});
@@ -316,13 +318,15 @@ app.get('/registration-google', (req, res) => {
 	      username: utente.email,
 	      email: utente.email,
 	      password: g_token,
+        g_token: g_token,
+        calendar_id: "",
 	      score: 0,
         challenges: []
 	    }).then( (user) => {
 	      req.session.regenerate(function(err) {
-	          req.session.user = user;
+	      req.session.user = user;
 			  req.session.success = 'Authenticates as' + user.username;
-	          res.redirect("/challenges");
+	      res.redirect("/challenges");
 	      });
         }).catch( (err) => { 
 		    console.log(err);
@@ -334,7 +338,7 @@ app.get('/registration-google', (req, res) => {
 });
 
 
-app.get('/logout', function(req, res){
+app.get('/logout', (req, res) => {
   // destroy the user's session to log them out
   // will be re-created next request
   req.session.destroy(function(){
@@ -342,6 +346,148 @@ app.get('/logout', function(req, res){
   });
 });
 
+/****************************************************************************** */
+
+// https://www.googleapis.com/calendar/v3/calendars/
+
+app.get('/calendar', function(req, res){
+  res.send("<br><br><button onclick='window.location.href=\"/create-calendar\"'>Add a new calendar</button>"+
+          "<br><br><button onclick='window.location.href=\"/create-event\"'>Add event</button>"+
+          "<br><br><button onclick='window.location.href=\"/delete-calendar\"'>Delete the calendar</button>");
+});
+
+
+app.get('/create-calendar', function(req, res){
+  if (req.session.user.g_token == ""){
+    res.redirect("/login-google");  // da cambiare con solo la richiesta per il token
+  }
+  if (req.session.user.calendar_id != ""){
+    console.log("Calendar already exists");
+    res.redirect("/calendar");
+  }
+  var options = {
+    url: 'https://www.googleapis.com/calendar/v3/calendars',
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer '+req.session.user.g_token
+    },
+    body: JSON.stringify({'summary': 'Solving Challenge'})
+  };
+  request(options, function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+      var info = JSON.parse(body);
+      console.log("Info of the calendar");
+      console.log(info);
+
+      // add calendar to user
+      users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$set: {calendar_id: info.id}})
+        .catch( (err) => {
+          res.status(500).json({success: false, message: err});
+        });
+      console.log("Id:");
+      console.log(info.id);
+      var utente = req.session.user;
+      req.session.regenerate(() => {
+        req.session.user = {username: utente.email, email: utente.email, g_token: utente.g_token, calendar_id: info.id, score: utente.score, challenges: utente.challenges};
+        res.redirect("/calendar");
+      });
+    }
+    else {
+      res.json({error});
+    }
+  });
+});
+
+app.get('/delete-calendar', function(req, res){
+  if (req.session.user.g_token == ""){
+    res.redirect("/login-google");
+  }
+  if (req.session.user.calendar_id == ""){
+    console.log("Calendar doesn't exist");
+    console.log(req.session.user.calendar_id);
+    console.log(req.session.user);
+    res.redirect("/calendar");
+    return;
+  }
+  // req.session.calendar_id = "u0mhnsl1fb82mnkvmliie272jc@group.calendar.google.com";
+  var options = {
+    url: 'https://www.googleapis.com/calendar/v3/calendars/'+req.session.user.calendar_id,
+    method: 'DELETE',
+    headers: {
+      'Authorization': 'Bearer '+req.session.user.g_token
+    }
+  };
+  request(options, function callback(error, response, body) {
+    if (error) {
+      console.log({success: false, message: error});
+    }
+    console.log(body);
+    // dovrebbe cancellare il calendario
+    var utente = req.session.user;
+    req.session.regenerate(() => {
+      req.session.user = {username: utente.email, email: utente.email, g_token: utente.g_token, calendar_id: "", score: utente.score, challenges: utente.challenges};
+      res.redirect("/calendar");
+    });
+  });
+});
+
+
+
+app.get('/create-event', function(req, res) {
+  if (req.session.user.g_token == ""){
+    res.redirect("/login-google");
+  }
+  if (req.session.user.calendar_id == ""){
+    console.log("Calendar doesn't exist");
+    console.log(req.session.user);
+    console.log(req.session.user.calendar_id);
+    res.redirect("/calendar");
+    return;
+  }
+  var ts = Date.now();
+  var date_ob = new Date(ts);
+  var date = date_ob.getDate() + 1;
+  var date2 = date+1;
+  var month = date_ob.getMonth() + 1;
+  var year = date_ob.getFullYear();
+  
+  // prints date & time in YYYY-MM-DD format
+  console.log(year + "-" + month + "-" + date);
+  var body = {
+    "summary": "Prova google calendar 2",
+    "description": "Questa è la prova del calendario",
+    "start": {
+      "date": year + "-" + month + "-" + date,
+      "timeZone": "Europe/Zurich"
+    },
+    "end": {
+      "date": year + "-" + month + "-" + date2,
+      "timeZone": "Europe/Zurich"
+    }
+  };
+  request({
+    url: 'https://www.googleapis.com/calendar/v3/calendars/'+req.session.user.calendar_id+'/events',
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': 'Bearer '+req.session.user.g_token
+    },
+    body: JSON.stringify(body)
+  }, function callback(error, response, body1) {
+    if (!error) {
+      var info = JSON.parse(body1);
+      console.log("Informazioni del nuovo evento creato");
+      console.log(info);
+      res.redirect("/calendar");
+    }
+    else {
+      console.log(error);
+    }
+  });
+});
+
+
+/************************************************************************************ */
 app.get('/challenges', restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problems/problems.html'))
 });
@@ -393,7 +539,7 @@ app.get("/userInfo", restrict, (req, res) => {
         res.status(404).send({success: false, error: 'User not found.' + user});
       }
       else {
-			res.status(200).send({success: true, id: user.id, username: user.username, email: user.email, score: user.score, challenges: user.challenges});
+			res.status(200).send({success: true, id: user.id, username: user.username, email: user.email, g_token: user.g_token, calendar_id: user.calendar_id, score: user.score, challenges: user.challenges});
       }
 	})
 	.catch( (err) => {

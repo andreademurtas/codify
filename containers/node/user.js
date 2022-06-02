@@ -32,6 +32,16 @@ const User = new Schema({
 			type: String,
             required: true,
 		},
+		g_token: {
+			type: String,
+			default: "",
+			required: false,
+		},
+		calendar_id: {
+			type: String,
+			default: "",
+			required: false,
+		},
 		score: {
 			type: Number,
 		    default: 0,
