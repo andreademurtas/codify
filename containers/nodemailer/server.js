@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
 
 // Setup Nodemailer transport
 const transport = nodemailer.createTransport({
-	service: 'Gmail',
+	service: 'gmail',
 	auth: {
 	    user: 'codify045@gmail.com',
 	    pass: 'sbbt ijlo gaqo ouwu'
@@ -91,3 +91,4 @@ amqplib.connect('amqp://guest:guest@rabbitmq', (err, connection) => {
         });
     });
 });
+

@@ -184,7 +184,7 @@ app.post('/signup', (req, res) => {
                 		}
                 		sent++;
                 		sender({
-                    			text: 'email:' + email + ' username:' + username
+                    			email: email, username: username
                     		});
                     		return channel.close(() => connection.close());
             		};
