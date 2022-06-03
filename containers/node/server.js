@@ -363,7 +363,7 @@ app.get('/create-calendar', function(req, res){
   }
   if (req.session.user.calendar_id != ""){
     console.log("Calendar already exists");
-    res.redirect("/calendar");
+    res.redirect("/profile");
   }
   var options = {
     url: 'https://www.googleapis.com/calendar/v3/calendars',
@@ -389,7 +389,7 @@ app.get('/create-calendar', function(req, res){
       var utente = req.session.user;
       req.session.regenerate(() => {
         req.session.user = {username: utente.email, email: utente.email, g_token: utente.g_token, calendar_id: info.id, score: utente.score, challenges: utente.challenges};
-        res.redirect("/calendar");
+        res.redirect("/profile");
       });
     }
     else {
@@ -406,7 +406,7 @@ app.get('/delete-calendar', function(req, res){
     console.log("Calendar doesn't exist");
     console.log(req.session.user.calendar_id);
     console.log(req.session.user);
-    res.redirect("/calendar");
+    res.redirect("/profile");
     return;
   }
   // req.session.calendar_id = "u0mhnsl1fb82mnkvmliie272jc@group.calendar.google.com";
@@ -426,7 +426,7 @@ app.get('/delete-calendar', function(req, res){
     var utente = req.session.user;
     req.session.regenerate(() => {
       req.session.user = {username: utente.email, email: utente.email, g_token: utente.g_token, calendar_id: "", score: utente.score, challenges: utente.challenges};
-      res.redirect("/calendar");
+      res.redirect("/profile");
     });
   });
 });
@@ -441,7 +441,7 @@ app.get('/create-event', function(req, res) {
     console.log("Calendar doesn't exist");
     console.log(req.session.user);
     console.log(req.session.user.calendar_id);
-    res.redirect("/calendar");
+    res.redirect("/profile");
     return;
   }
   var ts = Date.now();
@@ -478,7 +478,7 @@ app.get('/create-event', function(req, res) {
       var info = JSON.parse(body1);
       console.log("Informazioni del nuovo evento creato");
       console.log(info);
-      res.redirect("/calendar");
+      res.redirect("/profile");
     }
     else {
       console.log(error);
