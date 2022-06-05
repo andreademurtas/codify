@@ -74,6 +74,15 @@ function restrict(req, res, next) {
   }
 }
 
+function inverseRestrict(req, res, next) {
+  if (!req.session.user) {
+	next();
+  } else {
+	req.session.error = 'Access denied!';
+	res.redirect('/challenges');
+  }
+}
+
 function restrictAPI(req, res, next) {
   if (req.session.user) {
     next();
@@ -85,7 +94,7 @@ function restrictAPI(req, res, next) {
 
 users_module.mongoconnect();
 
-app.get('/', (req, res) => {
+app.get('/',inverseRestrict, (req, res) => {
   res.sendFile(path.join(__dirname + '/static/templates/homepage/homepage.html'));
 });
 
@@ -490,7 +499,7 @@ app.get('/challenges', restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problems/problems.html'))
 });
 
-app.get('/challenge', (req, res) => {
+app.get('/challenge', restrict, (req, res) => {
   res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
 });
 
@@ -558,7 +567,7 @@ app.get("/getChallenge", (req, res) => {
 
 app.get("/isLoggedIn", (req, res) => {
     if (req.session.user) {
-	  res.status(200).send({success: true, user: req.session.user});
+	  res.status(200).send({success: true, user: req.session.user.email});
 	}
 	else {
 	  res.status(200).send({success: false, user: null});
