@@ -101,3 +101,14 @@ background: black;
 .container{
     margin-top: 120px;
 }
+
+.evento_creato{
+    display: none;
+    background-color: lightgreen;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.create_event:hover, .delete_calendar:hover{
+    color: white !important;
+}

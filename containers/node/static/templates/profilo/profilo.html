@@ -18,7 +18,6 @@
 				    document.getElementById("username").innerText = data.username;
 				    document.getElementById("email").innerText = data.email;
 
-
 	  				var req = new XMLHttpRequest();
 	 			 	req.open('GET', '/isLoggedIn', true);
 	  				req.onreadystatechange = function() {
@@ -35,6 +34,48 @@
 	    		};
 	  			req.send();
 				});
+		</script>
+		<script>
+			function create_event(){
+				var req = new XMLHttpRequest();
+				req.open('GET', '/create-event', true);
+				req.onreadystatechange = function() {
+					if (this.status == 200 && this.readyState == 4) {
+						console.log(this.responseText);
+						var result = JSON.parse(this.responseText);
+						var evento = document.getElementById("evento_creato");
+						if (!result.success){
+							evento.style.background = "red";
+						}
+						else{
+							evento.style.background = "lightgreen";
+						}
+						evento.innerHTML = result.message;
+						evento.style.display = "block" ;
+					}
+				};
+	  			req.send();
+			}
+			function delete_calendar(){
+				var req = new XMLHttpRequest();
+				req.open('GET', '/delete-calendar', true);
+				req.onreadystatechange = function() {
+					if (this.status == 200 && this.readyState == 4) {
+						console.log(this.responseText);
+						var result = JSON.parse(this.responseText);
+						var evento = document.getElementById("evento_creato");
+						if (!result.success){
+							evento.style.background = "red";
+						}
+						else{
+							evento.style.background = "lightgreen";
+						}
+						evento.innerHTML = result.message;
+						evento.style.display = "block" ;
+					}
+				};
+	  			req.send();
+			}
 		</script>
 
     </head>
@@ -87,9 +128,10 @@
 			<br>
 			<h5>Calendar</h5>
 			<br>
-			<a href="/create-calendar" class="profile_button px-5" style="background: yellowgreen;">Create calendar</a>
-			<a href="/create-event" class="profile_button px-5" style="background: yellowgreen;">Create event</a>
-			<a href="/delete-calendar" class="profile_button px-5" style="background: indianred;">Delete calendar</a>
+			<a class="profile_button px-5 create_event" style="background: yellowgreen;" onclick="create_event()">Create event</a>
+			<a class="profile_button px-5 delete_calendar" style="background: indianred;" onclick="delete_calendar()">Delete calendar</a>
+			<div class="container" id="parte_superiore" style="width: 100%; margin-top: 40px;"><h5 id="evento_creato" class="evento_creato"></h5></div>
+
         </div>
     </div>
 </div>
