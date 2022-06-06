@@ -357,12 +357,6 @@ app.get('/logout', (req, res) => {
 
 // https://www.googleapis.com/calendar/v3/calendars/
 
-app.get('/calendar', function(req, res){
-  res.send("<br><br><button onclick='window.location.href=\"/create-calendar\"'>Add a new calendar</button>"+
-          "<br><br><button onclick='window.location.href=\"/create-event\"'>Add event</button>"+
-          "<br><br><button onclick='window.location.href=\"/delete-calendar\"'>Delete the calendar</button>");
-});
-
 
 app.get('/create-calendar', function(req, res){
   if (req.session.user.g_token == ""){

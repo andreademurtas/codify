@@ -18,7 +18,7 @@
       form.addEventListener('submit', handleFormSubmit);
 	  
       var req = new XMLHttpRequest();
-	  req.open('GET', 'http://localhost/isLoggedIn', true);
+	  req.open('GET', '/isLoggedIn', true);
 	  req.onreadystatechange = function() {
 	      if (this.status == 200 && this.readyState == 4) {
 			var response = JSON.parse(this.responseText);
