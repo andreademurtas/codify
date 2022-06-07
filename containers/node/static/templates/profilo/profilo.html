@@ -38,7 +38,6 @@
 		<script> 
 			function create_event(){
 				var req = new XMLHttpRequest();
-				req.open('GET', '/create-event', true);
 				req.onreadystatechange = function() {
 					if (this.status == 200 && this.readyState == 4) {
 						console.log(this.responseText);
@@ -54,11 +53,11 @@
 						evento.style.display = "block" ;
 					}
 				};
+				req.open('GET', '/create-event', true);
 	  			req.send();
 			}
 			function delete_calendar(){
 				var req = new XMLHttpRequest();
-				req.open('GET', '/delete-calendar', true);
 				req.onreadystatechange = function() {
 					if (this.status == 200 && this.readyState == 4) {
 						console.log(this.responseText);
@@ -74,6 +73,7 @@
 						evento.style.display = "block" ;
 					}
 				};
+				req.open('GET', '/delete-calendar', true);
 	  			req.send();
 			}
 		</script>
