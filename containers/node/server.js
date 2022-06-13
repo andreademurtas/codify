@@ -518,7 +518,7 @@ app.post('/getOutput', (req, res) => {
 
 
 /**
- * @api {get} /api/users/username Request User information
+ * @api {get} api/users/username Request User information
  * @apiName GetUser
  * @apiGroup User
  *
@@ -564,7 +564,7 @@ app.get("/api/users/:user", (req, res) => {
 
 
 /**
- * @api {post} /api/users/create Create a new User 
+ * @api {post} api/users/create Create a new User 
  * @apiName CreateUser
  * @apiGroup User
  *
@@ -607,7 +607,7 @@ app.post("/api/users/create", (req, res) => {
 
 
 /**
- * @api {post} /api/users/delete Delete User
+ * @api {post} api/users/delete Delete User
  * @apiName DeleteUser
  * @apiGroup User
  *
