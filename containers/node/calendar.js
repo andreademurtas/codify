@@ -186,7 +186,13 @@ function delete_calendar(user){
   });
 }
 
-
+function link_calendar(user){
+	return new Promise((resolve, reject) => {
+		if (user.g_token != ""){
+			resolve({success: false, message: "You already have a google account linked"});
+		}
+	});
+}
 
 
 

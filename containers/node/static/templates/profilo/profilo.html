@@ -16,7 +16,16 @@
 		            data = await response.json();
 				    document.getElementById("score").innerText = data.score;
 				    document.getElementById("username").innerText = data.username;
-				    document.getElementById("email").innerText = data.email;
+
+					if (data.g_token === "") {
+						document.getElementById("linkcalendar").href = "/link-calendar";
+						document.getElementById("linkcalendar").style.display = "block";
+					}			
+					else {
+						document.getElementById("evento_creato").style.backgroundColor = "red";
+						document.getElementById("evento_creato").innerHTML = "You already have a google account linked";
+						document.getElementById("linkcalendar").style.display = "none";
+					}
 
 	  				var req = new XMLHttpRequest();
 	 			 	req.open('GET', '/isLoggedIn', true);
@@ -76,6 +85,26 @@
 				req.open('GET', '/delete-calendar', true);
 	  			req.send();
 			}
+			function link_calendar() {
+                var req = new XMLHttpRequest();
+				req.onreadystatechange = function() {
+					if (this.status == 200 && this.readyState == 4) {
+						console.log(this.responseText);
+						var result = JSON.parse(this.responseText);
+						var evento = document.getElementById("evento_creato");
+						if (!result.success){
+							evento.style.background = "red";
+						}
+						else{
+							evento.style.background = "lightgreen";
+						}
+						evento.innerHTML = result.message;
+						evento.style.display = "block" ;
+					}
+				};
+				req.open("GET", "/link-calendar", true);
+	  			req.send();
+			}
 		</script>
 
     </head>
@@ -109,7 +138,9 @@
         <div class="text-center"> 
 		<img src="templates/profilo/profilo.jpg" width="100" class="rounded-circle">
             <h3 class="mt-2" id="username"></h3>
-            <h3 class="mt-2" id="email"></h3>
+			<br>
+			<br>
+			<a class="profile_button px-5" id="linkcalendar" style="color: white" onclick="link_calendar()">Link Google</a>
 			<span class="mt-1 clearfix"></span>
 			
 			<div class="row mt-3 mb-3 justify-content-center">

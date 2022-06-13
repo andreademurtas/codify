@@ -384,6 +384,47 @@ app.get('/delete-calendar', restrict, function(req, res){
   }
 });
 
+app.get("/link-calendar", restrict, function(req, res){
+	host = process.env.HOST_REDIRECT;
+	if (!host)  host = 'http://localhost';
+  		res.redirect("https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar&response_type=code&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=" + host + "/googlecallbackcalendar&client_id="+process.env.G_CLIENT_ID);
+});
+
+app.get("/googlecallbackcalendar", (req, res) => {
+  if (req.query.code!=undefined){  
+	res.redirect('gtokencalendar?code='+req.query.code);
+  }
+  else{
+    res.status(500).send('Errore durante la richiesta del code di Google');
+  }
+});
+
+app.get('/gtokencalendar', (req, res) => {
+  var url = 'https://www.googleapis.com/oauth2/v3/token';
+  var formData = {
+	code: req.query.code,
+	client_id: process.env.G_CLIENT_ID,
+	client_secret: process.env.G_CLIENT_SECRET,
+	redirect_uri: host + "/googlecallbackcalendar",
+	grant_type: 'authorization_code'
+  }
+
+  request.post({url: url, form: formData}, (error, response, body) => {
+    if (error){console.log(error);}
+	var info = JSON.parse(body);
+	if(info.error != undefined){res.send(info.error);}
+	else{
+	  users_module.User.findOneAndUpdate({email: req.session.user.email}, {$set: {g_token: info.access_token}}, {new: true}).then((user) => {
+        req.session.regenerate(function(err) {
+		    req.session.user = user;
+			res.redirect("/profile");
+		});
+	  });
+	} 
+  })
+});
+
+
 
 /************************************************************************************ */
 app.get('/challenges', restrict, (req, res) => {
