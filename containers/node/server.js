@@ -95,8 +95,15 @@ function restrictAPI(req, res, next) {
 
 users_module.mongoconnect();
 
+/******************************GET PATH STATIC*************************************************/
+
 app.get('/',inverseRestrict, (req, res) => {
   res.sendFile(path.join(__dirname + '/static/templates/homepage/homepage.html'));
+});
+
+//login page
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname,'/static/templates/login/login.html'));
 });
 
 //signup page
@@ -107,6 +114,28 @@ app.get('/signup', (req, res) => {
 app.get('/profilo-calendar-google', (req, res) => {
   res.sendFile(path.join(__dirname + '/static/templates/profilo/calendar/index.html'));
 });
+
+app.get('/challenges', restrict, (req, res) => {
+  res.sendFile(path.join(__dirname, '/static/templates/problems/problems.html'))
+});
+
+app.get('/challenge', restrict, (req, res) => {
+  res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
+});
+
+app.get("/profile", restrict, (req, res) => {
+  res.sendFile(path.join(__dirname, '/static/templates/profilo/profilo.html'));
+});
+
+app.get('/logout', (req, res) => {
+  // destroy the user's session to log them out
+  // will be re-created next request
+  req.session.destroy(function(){
+    res.redirect('/');
+  });
+});
+
+/***************************POST FOR LOGIN & SIGNUP******************************************* */
 
 // signup post request
 app.post('/signup', (req, res) => {
@@ -211,10 +240,6 @@ app.post('/signup', (req, res) => {
 });
 });
 
-//login page
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname,'/static/templates/login/login.html'));
-});
 
 // login post request
 app.post('/login', (req, res, next) => {
@@ -239,6 +264,8 @@ app.post('/login', (req, res, next) => {
 	  }
   });
 });
+
+/***********************GOOGLE OAUTH ***************************************************************/
 
 var host = "";
 app.get('/login-google', (req, res) => {
@@ -348,18 +375,7 @@ app.get('/registration-google', (req, res) => {
     });
 });
 
-
-app.get('/logout', (req, res) => {
-  // destroy the user's session to log them out
-  // will be re-created next request
-  req.session.destroy(function(){
-    res.redirect('/');
-  });
-});
-
-/****************************************************************************** */
-
-// https://www.googleapis.com/calendar/v3/calendars/
+/***********************GOOGLE  CALENDAR***************************************************************/
 
 app.get('/create-event', restrict, function(req, res) {
   if (req.session.user.g_token == ""){
@@ -383,6 +399,8 @@ app.get('/delete-calendar', restrict, function(req, res){
     });
   }
 });
+
+/***********************GOOGLE CALENDAR OAUTH***************************************************************/
 
 app.get("/link-calendar", restrict, function(req, res){
 	host = process.env.HOST_REDIRECT;
@@ -425,21 +443,7 @@ app.get('/gtokencalendar', (req, res) => {
 });
 
 
-
-/************************************************************************************ */
-app.get('/challenges', restrict, (req, res) => {
-  res.sendFile(path.join(__dirname, '/static/templates/problems/problems.html'))
-});
-
-app.get('/challenge', restrict, (req, res) => {
-  res.sendFile(path.join(__dirname, '/static/templates/problem/problem.html'))
-});
-
-
-app.get("/profile", restrict, (req, res) => {
-  res.sendFile(path.join(__dirname, '/static/templates/profilo/profilo.html'));
-});
-
+/************************ADD & GET INFO*************************************/
 
 app.get("/addChallenge", restrict, (req, res) => {
   users_module.User.findOneAndUpdate({ username: req.session.user.username}, {$push: {challenges: req.query.id}, $inc: {score: parseInt(req.query.score)}})
@@ -447,8 +451,6 @@ app.get("/addChallenge", restrict, (req, res) => {
 	  res.status(500).json({success: false, message: err});
 	});
 });
-
-
 
 app.get("/getUsers", (req, res) => {
   users_module.User.find({})
