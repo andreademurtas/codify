@@ -13,7 +13,7 @@ Codify è un'applicazione web dove puoi allenarti a risolvere problemi di inform
 - L'applicazione si interfaccia con JDoodle attraverso la sua API per rendere possibile l'esecuzione di codice in maniera interattiva.
 - L'applicazione si interfaccia con Google Calendar attraverso la sua API per rendere possibile la creazione di promemoria per l'allenamento.
 - L'applicazione utilizza RabbitMQ per far comunicare in maniera asincrona il server principale con un'istanza Nodejs che utlizza Nodemailer
-  per iniviare e-mails di conferma della registrazione agli utenti.
+  per iniviare un'email di conferma della registrazione agli utenti.
 - L'applicazione utilizza Docker per la containerizzazione delle varie componenti e Docker Compose per l'orchestrazione delle stesse.
 - E' implementata una procedura di CI/CD attraverso Github Actions, che prevede il deployment su un server EC2 (AWS) e esecuzione di test
   implementati grazie a Mochajs e Chaijs
